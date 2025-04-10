@@ -19,6 +19,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Clone s4hri-docker repository
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git clone -b pyicub-ubuntu22.04-robotologyv2024.x https://github.com/s4hri/s4hri-docker.git
           cd s4hri-docker 
