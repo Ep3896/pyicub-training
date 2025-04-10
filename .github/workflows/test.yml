@@ -1,0 +1,46 @@
+name: Run CI Tests via Docker Compose
+
+on:
+  pull_request:
+    branches: [dev]
+  push:
+    branches: [feat/pytest-workflow]
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      GITHUB_URL: ${{ github.event.pull_request.head.repo.clone_url || format('https://github.com/{0}.git', github.repository) }}
+      GITHUB_BRANCH: ${{ github.event.pull_request.head.ref || github.ref_name }}
+
+    steps:
+      - name: Checkout this repository (pyicub fork or original)
+        uses: actions/checkout@v4
+
+      - name: Clone s4hri-docker repository
+        run: |
+          git clone -b pyicub-ubuntu22.04-robotologyv2024.x https://github.com/s4hri/s4hri-docker.git
+          cd s4hri-docker 
+
+      - name: Build the image using .dockyman
+        run: |
+          PYICUB_URL=${{env.GITHUB_URL}} PYICUB_BRANCH=${{env.GITHUB_BRANCH}} make -C .dockyman build
+
+      - name: Run test service using docker compose 
+        run:
+          # Run tests using docker-compose (with test profile)
+          docker compose --profile test up
+          
+      - name: Upload pytest results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-results
+          path: s4hri-docker/workdir/results.xml
+
+      - name: Publish test result annotations
+        if: always()
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: s4hri-docker/workdir/results.xml
