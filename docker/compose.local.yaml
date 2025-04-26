@@ -24,13 +24,17 @@
 
 version: '3.8'
 
-services:
-  
-  pyicub.local:
 
-    #extends:
-    #  file: .dockyman/services/dockyman.yaml
-    #  service: dockyman
+services:
+  pyicub.local:
+    build:
+      context: ./local
+      dockerfile: Dockerfile
+      args:
+        UID: ${LOCAL_USER_UID}
+        GID: ${LOCAL_USER_GID}
+        GROUPS: "sudo,audio,video,input,dialout"
+    image: ${PROJECT_DOCKER_NAME}.local
     volumes:
       - ../scripts:/scripts
     command: --image_name ${PROJECT_DOCKER_NAME:?err} --username icub --groups "sudo,audio,video,input,dialout"

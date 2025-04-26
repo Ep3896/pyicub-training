@@ -1,4 +1,27 @@
-#!/bin/bash
 
-source dockyman.env
-make -C .dockyman run
+#!/bin/bash
+set -e
+
+# 1. Clean state (remove only containers, not volumes)
+echo "Bringing down any running containers (preserving volumes)..."
+docker compose -f compose.base.yaml down --remove-orphans || true
+docker compose -f compose.local.yaml down --remove-orphans || true
+docker compose -f compose.yaml down --remove-orphans || true
+
+# 2. Update .env with current UID/GID
+echo "Updating UID/GID in .env file..."
+sed -i '/^LOCAL_USER_UID=/d' .env 2>/dev/null || true
+sed -i '/^LOCAL_USER_GID=/d' .env 2>/dev/null || true
+echo "LOCAL_USER_UID=$(id -u)" >> .env
+echo "LOCAL_USER_GID=$(id -g)" >> .env
+
+# 3. Build (in the same order as your commands_docker.txt)
+echo "Building base images..."
+docker compose -f compose.base.yaml build
+
+echo "Building local images..."
+docker compose -f compose.local.yaml build
+
+# 4. Start up
+echo "Starting up the stack using compose.yaml..."
+docker compose -f compose.yaml up

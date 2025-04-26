@@ -2,7 +2,7 @@ services:
 
   pyicub:
     image: ${PROJECT_DOCKER_NAME:?err}.local
-
+    gpus: all
     #extends:
     #  file: .dockyman/profiles/local.yaml
     #  service: local
@@ -65,7 +65,7 @@ services:
   pyicub-test:
 
     image: ${PROJECT_DOCKER_NAME:?err}.local
-
+    gpus: all
     #extends:
     #  file: .dockyman/profiles/local.yaml
     #  service: local

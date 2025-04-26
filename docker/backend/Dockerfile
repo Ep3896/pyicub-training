@@ -21,8 +21,12 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+#ARG DOCKER_SRC=ubuntu:latest
+#FROM $DOCKER_SRC
+
+
 ARG DOCKER_SRC=ubuntu:latest
-FROM $DOCKER_SRC
+FROM ${DOCKER_SRC}
 
 LABEL maintainer="Davide De Tommaso <davide.detommaso@iit.it>"
 
@@ -33,6 +37,22 @@ ARG PYICUB_VERSION=master
 ARG PYICUB_APPS_URL=https://github.com/s4hri/pyicub-apps
 ARG PYICUB_APPS_BRANCH=master
 ARG PYICUB_APPS_VERSION=master
+
+
+# install git
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install git -y 
+
+RUN apt-get install python3-pip -y && \
+    apt-get install python3-dev -y && \
+    apt-get install build-essential -y && \
+    apt-get install libpython3-dev -y && \
+    apt-get install graphviz -y && \
+    apt-get install libgraphviz-dev -y && \
+    apt-get install pkg-config -y
+
+# RUN useradd -m icub
 
 WORKDIR /home/icub
 
@@ -48,13 +68,13 @@ RUN cd /home/icub && \
     if [ "${PYICUB_URL}" = "https://github.com/s4hri/pyicub" ]; then \
         git checkout ${PYICUB_VERSION}; \
     fi && \
-    pip3 install -r requirements.txt
-
+    pip3 install  -r requirements.txt && \
+    pip3 install -U pytest
+    
 RUN cd /home/icub && \
     git clone ${PYICUB_APPS_URL} -b ${PYICUB_APPS_BRANCH} && \
     cd pyicub-apps && \
     git checkout ${PYICUB_APPS_VERSION}
 
-RUN pip install -U pytest
 
 ENV PYTHONPATH=/home/icub/pyicub:/workdir

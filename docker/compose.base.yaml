@@ -26,13 +26,12 @@ services:
   
   pyicub.base:
 
-    #extends:
-    #  file: .dockyman/services/dockyman.yaml
-    #  service: dockyman
-
     build:
       context: ./backend
       dockerfile: Dockerfile
+      args:
+        DOCKER_SRC: ${PROJECT_DOCKER_SRC}
+    image: pyicub_backend_image
     container_name: pyicub-backend
 
     env_file:
