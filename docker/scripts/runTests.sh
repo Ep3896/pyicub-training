@@ -38,7 +38,7 @@ iKinGazeCtrl --context gazeboCartesianControl --from iKinGazeCtrl.ini >/dev/null
 sleep 2
 
 #run tests
-PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v --junitxml=/workdir/results.xml
+PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v #--junitxml=/workdir/results.xml
 PYTEST_EXIT_CODE=$?
 
 # Clean up: kill all background jobs
