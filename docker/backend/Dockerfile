@@ -69,6 +69,7 @@ RUN cd /home/icub && \
         git checkout ${PYICUB_VERSION}; \
     fi && \
     pip3 install  -r requirements.txt && \
+    pip3 install pytest-cov && \
     pip3 install -U pytest
     
 RUN cd /home/icub && \
