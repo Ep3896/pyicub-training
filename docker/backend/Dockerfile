@@ -25,52 +25,72 @@
 #FROM $DOCKER_SRC
 
 
-ARG DOCKER_SRC=ubuntu:latest
-FROM ${DOCKER_SRC}
+# ─── BASE IMAGE ─────────────────────────────────────────────────────
+FROM robot-base:latest
 
-LABEL maintainer="Davide De Tommaso <davide.detommaso@iit.it>"
+# ─── GUI ENV VARIABLES ─────────────────────────────────────────────
+ENV QT_X11_NO_MITSHM=1
+ENV DISPLAY=:0
+# Disable audio for OpenAL (used by Gazebo)
+RUN echo "drivers=null" > /etc/openal/alsoft.conf
+ENV ALSOFT_CONF=/etc/openal/alsoft.conf
 
+# ─── GAZEBO GUI DEPENDENCIES ───────────────────────────────────────
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgl1-mesa-glx \
+    libgl1-mesa-dri \
+    x11-xserver-utils \
+    libx11-xcb1 \
+    libxcb1 \
+    libxcb-util1 \
+    libxcb-xinerama0 \
+    libxrender1 \
+    libxkbcommon-x11-0 \
+    libfontconfig1 \
+    libfreetype6 \
+    libxext6 \
+    terminator \
+    qtchooser \
+    qt5-qmake \
+    qtbase5-dev-tools \
+    qtbase5-dev && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# ─── SSH ACCESS ──────────────────────────────────────────
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openssh-server sshpass && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
+
+ENV PATH=$PATH:/root/.local/bin
+
+# ─── CLONE & INSTALL pyicub ─────────────────────────────────────────
 ARG PYICUB_URL=https://github.com/s4hri/pyicub
 ARG PYICUB_BRANCH=master
 ARG PYICUB_VERSION=master
 
+RUN cd /root && \
+    git clone ${PYICUB_URL} -b ${PYICUB_BRANCH} && \
+    cd pyicub && \
+    if [ "${PYICUB_URL}" = "https://github.com/s4hri/pyicub" ]; then \
+        git checkout ${PYICUB_VERSION}; \
+    fi && \
+    pip3 install -r requirements.txt && \
+    pip3 install -U pytest pytest-cov
+
+# ─── CLONE pyicub-apps ─────────────────────────────────────────────
 ARG PYICUB_APPS_URL=https://github.com/s4hri/pyicub-apps
 ARG PYICUB_APPS_BRANCH=master
 ARG PYICUB_APPS_VERSION=master
 
-
-# install git
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install git -y 
-
-RUN apt-get install python3-pip -y && \
-    apt-get install python3-dev -y && \
-    apt-get install build-essential -y && \
-    apt-get install libpython3-dev -y && \
-    apt-get install graphviz -y && \
-    apt-get install libgraphviz-dev -y && \
-    apt-get install pkg-config -y
-
-
-ENV PATH=$PATH:/home/icub/.local/bin
-
-RUN cd /home/icub && \
-    git clone ${PYICUB_URL} -b ${PYICUB_BRANCH} && \
-    cd pyicub && \
-    # The following line is commented out because the versioning strategy for pyicub needs to be clarified.
-    # Specifically, we should run `git checkout ${PYICUB_VERSION}` only if `PYICUB_URL` is set to "https://github.com/s4hri/pyicub".
-    if [ "${PYICUB_URL}" = "https://github.com/s4hri/pyicub" ]; then \
-        git checkout ${PYICUB_VERSION}; \
-    fi && \
-    pip3 install  -r requirements.txt && \
-    pip3 install pytest-cov && \
-    pip3 install -U pytest
-    
-RUN cd /home/icub && \
+RUN cd /root && \
     git clone ${PYICUB_APPS_URL} -b ${PYICUB_APPS_BRANCH} && \
     cd pyicub-apps && \
     git checkout ${PYICUB_APPS_VERSION}
 
+# ─── PYTHONPATH ────────────────────────────────────────────────────
+ENV PYTHONPATH=/root/pyicub:/workdir
 
-ENV PYTHONPATH=/home/icub/pyicub:/workdir
+# ─── DEFAULT WORKDIR ───────────────────────────────────────────────
+WORKDIR /workspace
+CMD ["bash"]

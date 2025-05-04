@@ -1,6 +1,11 @@
 services:
 
   pyicub:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        DOCKER_SRC: ${PROJECT_DOCKER_SRC}
     image: ${PROJECT_DOCKER_NAME:?err}.local
     gpus: all
     user: "${LOCAL_USER_UID}:${LOCAL_USER_GID}"
@@ -8,7 +13,11 @@ services:
     env_file:
       - .env
     environment:
-      - DISPLAY=${DISPLAY:?err}
+      - DOCKER_SRC=${PROJECT_DOCKER_SRC}
+      - PYICUB_VERSION=${PYICUB_VERSION}
+      - PYICUB_URL=${PYICUB_URL}
+      - PYICUB_BRANCH=${PYICUB_BRANCH}
+      #- DISPLAY=${DISPLAY:?err}
       - PULSE_SERVER=unix:${XDG_RUNTIME_DIR:?err}/pulse/native
       - PULSE_COOKIE=/run/pulse/cookie
       - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:?err}
@@ -42,35 +51,32 @@ services:
       - type: bind
         source: ./workdir
         target: /workdir
-
     profiles: ["backend"]
-  
+
   pyicub-frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     image: ${PYICUB_FRONTEND_BASE_NAME}
-
-    env_file:
-      - .env
-
-    profiles: ["frontend"]
-
-    network_mode: host
-
-    depends_on:
-      - pyicub
-
-  
-  pyicub-test:
-
-    image: ${PROJECT_DOCKER_NAME:?err}.local
-    gpus: all
-    user: "${LOCAL_USER_UID}:${LOCAL_USER_GID}"
-
-    command: ["/bin/bash", "-c", "bash /var/scripts/runTests.sh"]
-
     env_file:
       - .env
     environment:
-      - DISPLAY=${DISPLAY:?err}
+      - PYICUB_FRONTEND_VERSION=${PYICUB_FRONTEND_VERSION}
+      - PYICUB_API_FRONTEND_PORT=${PYICUB_API_FRONTEND_PORT}
+    network_mode: host
+    depends_on:
+      - pyicub
+    profiles: ["frontend"]
+
+  pyicub-test:
+    image: ${PROJECT_DOCKER_NAME:?err}.local
+    gpus: all
+    user: "${LOCAL_USER_UID}:${LOCAL_USER_GID}"
+    command: ["/bin/bash", "-c", "bash /var/scripts/runTests.sh"]
+    env_file:
+      - .env
+    environment:
+      #- DISPLAY=${DISPLAY:?err}
       - PULSE_SERVER=unix:${XDG_RUNTIME_DIR:?err}/pulse/native
       - PULSE_COOKIE=/run/pulse/cookie
       - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:?err}
@@ -104,6 +110,4 @@ services:
       - type: bind
         source: ./workdir
         target: /workdir
-
     profiles: ["test"]
-

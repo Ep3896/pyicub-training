@@ -4,7 +4,7 @@
 
 source ${ROBOTOLOGY_SUPERBUILD_INSTALL_DIR}/share/robotology-superbuild/setup.sh
 
-python3 /home/icub/pyicub/pyicub/proc/actionizer.py build --module apps.robot.actions --target /workdir/apps/robot/actions
+python3 /root/pyicub/pyicub/proc/actionizer.py build --module apps.robot.actions --target /workdir/apps/robot/actions
 
 ICUB_HOSTS_ENTRY="$ICUB_IP icub-head"
 
@@ -13,7 +13,7 @@ if grep -Fxq "$ICUB_HOSTS_ENTRY" /etc/hosts; then
   echo "iCub entry already exists in /etc/hosts"
 else
   # Add the entry to /etc/hosts
-  echo "$ICUB_HOSTS_ENTRY" | sudo tee -a /etc/hosts >/dev/null
+  echo "$ICUB_HOSTS_ENTRY" | tee -a /etc/hosts >/dev/null
   echo "iCub entry added to /etc/hosts"
 fi
 

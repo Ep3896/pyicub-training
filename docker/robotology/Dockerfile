@@ -23,8 +23,7 @@ ENV TZ=Europe/Rome
 ENV DEBIAN_FRONTEND=noninteractive
 ENV ROBOTOLOGY_SUPERBUILD_INSTALL_DIR=$ROBOTOLOGY_SUPERBUILD_INSTALL_DIR
 ENV ROBOT_CODE=$ROBOT_CODE
-# Command below to suppress gazebo errror
-ENV SDL_AUDIODRIVER=dummy 
+
 
 RUN apt-get update
 RUN apt-get install -y nfs-common python-tk libopencv-dev ntpdate ssh cmake-curses-gui
@@ -66,17 +65,11 @@ RUN cd $ROBOTOLOGY_SUPERBUILD_SOURCE_DIR && \
 RUN git config --global --unset-all user.name && \
     git config --global --unset-all user.email
 
-#RUN useradd -ms /bin/bash icub
-#RUN usermod -a -G root,sudo icub
-
 RUN echo "source ${ROBOTOLOGY_SUPERBUILD_INSTALL_DIR}/share/robotology-superbuild/setup.sh" >> /root/.bashrc
-#RUN echo "source ${ROBOTOLOGY_SUPERBUILD_INSTALL_DIR}/share/robotology-superbuild/setup.sh" >> /home/icub/.bashrc
 RUN echo "source /etc/profile.d/bash_completion.sh" >> /root/.bashrc
-#RUN echo "source /etc/profile.d/bash_completion.sh" >> /home/icub/.bashrc
 
 RUN apt-get install -y sshpass openssh-server
 
 RUN mkdir -p /home/.vscode-server /home/.vscode-server-insiders
-#RUN chown -R icub /home/icub/.vscode-server /home/icub/.vscode-server-insiders
 
 RUN mkdir -p /home/.config/yarp
