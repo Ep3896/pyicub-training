@@ -52,11 +52,6 @@ RUN apt-get install python3-pip -y && \
     apt-get install libgraphviz-dev -y && \
     apt-get install pkg-config -y
 
-# RUN useradd -m icub
-
-WORKDIR /home/icub
-
-USER icub
 
 ENV PATH=$PATH:/home/icub/.local/bin
 
