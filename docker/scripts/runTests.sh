@@ -11,11 +11,11 @@ if grep -Fxq "$ICUB_HOSTS_ENTRY" /etc/hosts; then
   echo "iCub entry already exists in /etc/hosts"
 else
   # Add the entry to /etc/hosts
-  echo "$ICUB_HOSTS_ENTRY" | sudo tee -a /etc/hosts >/dev/null
+  echo "$ICUB_HOSTS_ENTRY" | tee -a /etc/hosts >/dev/null
   echo "iCub entry added to /etc/hosts"
 fi
 
-cd /home/icub/pyicub || exit 1
+cd /root/pyicub || exit 1
 sleep 2
 
 #Disable YARP logging to avoid clutter
@@ -38,7 +38,7 @@ iKinGazeCtrl --context gazeboCartesianControl --from iKinGazeCtrl.ini >/dev/null
 sleep 2
 
 #run tests
-PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v #--junitxml=/workdir/results.xml
+PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v --junitxml=/workdir/results.xml
 PYTEST_EXIT_CODE=$?
 
 # Clean up: kill all background jobs

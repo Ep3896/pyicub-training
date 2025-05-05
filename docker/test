@@ -28,6 +28,6 @@ COMPOSE_PROFILES=robotology,backend,frontend docker compose build
 
 # 3. Start up
 echo "Starting up the stack using compose.yaml..."
-COMPOSE_PROFILES=robotology,backend,frontend docker compose up
+COMPOSE_PROFILES=robotology,test docker compose up
 
-COMPOSE_PROFILES=robotology,backend,frontend docker compose down --remove-orphans
+COMPOSE_PROFILES=robotology,test docker compose down --remove-orphans
