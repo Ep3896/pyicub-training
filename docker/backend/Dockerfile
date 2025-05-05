@@ -30,7 +30,7 @@ FROM robot-base:latest
 
 # ─── GUI ENV VARIABLES ─────────────────────────────────────────────
 ENV QT_X11_NO_MITSHM=1
-ENV DISPLAY=:0
+ENV DISPLAY=:1
 # Disable audio for OpenAL (used by Gazebo)
 RUN echo "drivers=null" > /etc/openal/alsoft.conf
 ENV ALSOFT_CONF=/etc/openal/alsoft.conf

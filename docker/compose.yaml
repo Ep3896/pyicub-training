@@ -1,14 +1,14 @@
 services:
 
   pyicub:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-      args:
-        DOCKER_SRC: ${PROJECT_DOCKER_SRC}
-    image: ${PROJECT_DOCKER_NAME:?err}.local
+    # build:
+    #   context: ./backend
+    #   dockerfile: Dockerfile
+    #   args:
+    #     DOCKER_SRC: ${PROJECT_DOCKER_SRC}
+    image: robot-gazebo:latest
     gpus: all
-    user: "${LOCAL_USER_UID}:${LOCAL_USER_GID}"
+    #user: "${LOCAL_USER_UID}:${LOCAL_USER_GID}"
     command: ["/bin/bash", "-c", "terminator & bash /var/scripts/initContainer.sh"]
     env_file:
       - .env
@@ -17,7 +17,7 @@ services:
       - PYICUB_VERSION=${PYICUB_VERSION}
       - PYICUB_URL=${PYICUB_URL}
       - PYICUB_BRANCH=${PYICUB_BRANCH}
-      #- DISPLAY=${DISPLAY:?err}
+      - DISPLAY=${DISPLAY:?err}
       - PULSE_SERVER=unix:${XDG_RUNTIME_DIR:?err}/pulse/native
       - PULSE_COOKIE=/run/pulse/cookie
       - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:?err}
