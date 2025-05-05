@@ -18,6 +18,10 @@ if [ -z "$XDG_DATA_DIRS" ]; then
   export XDG_DATA_DIRS="/usr/local/share:/usr/share:/var/lib/snapd/desktop"
 fi
 
+# Grant root access to X server
+
+xhost +local:root
+
 # 1. Clean state (remove only containers, not volumes)
 echo "Bringing down any running containers (preserving volumes)..."
 COMPOSE_PROFILES=robotology,backend,frontend docker compose down --remove-orphans

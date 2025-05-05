@@ -32,4 +32,3 @@ if ! $ICUB_SIMULATION; then
   sshpass -p icub ssh -o StrictHostKeyChecking=no icub@$ICUB_IP "killall -9 yarprun"
   sshpass -p icub ssh -o StrictHostKeyChecking=no icub@$ICUB_IP "killall -9 yarpdev"
 fi
-
