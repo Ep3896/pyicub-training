@@ -1,31 +1,15 @@
 services:
-
-  robotology:
-    build:
-      context: ./robotology
-      dockerfile: Dockerfile
-    image: robot-base:latest
-    profiles: ["robotology"]
-    pull_policy: never # i don't want to pull the image remotely as it is build locally
-
   pyicub:
+    container_name: pyicub
     build:
       context: ./backend
       dockerfile: Dockerfile
       args:
-        DOCKER_SRC: robotology-superbuild:latest  
-    image: robot-gazebo:latest
-    depends_on:
-      - robotology
+        DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME} 
+    image: ${PYICUB_IMAGE_NAME}
     gpus: all
     command: ["/bin/bash", "-c", "terminator & bash /var/scripts/initContainer.sh"]
-    env_file:
-      - .env
     environment:
-      - DOCKER_SRC=${PROJECT_DOCKER_SRC}
-      - PYICUB_VERSION=${PYICUB_VERSION}
-      - PYICUB_URL=${PYICUB_URL}
-      - PYICUB_BRANCH=${PYICUB_BRANCH}
       - DISPLAY=${DISPLAY:?err}
       - PULSE_SERVER=unix:${XDG_RUNTIME_DIR:?err}/pulse/native
       - PULSE_COOKIE=/run/pulse/cookie
@@ -36,6 +20,8 @@ services:
       - LIBGL_ALWAYS_SOFTWARE=false
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
+    env_file:
+      - .env
     working_dir: /workdir
     privileged: true
     stdin_open: true
@@ -60,29 +46,24 @@ services:
       - type: bind
         source: ./workdir
         target: /workdir
+
     profiles: ["backend"]
 
   pyicub-frontend:
+    container_name: pyicub-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: ${PYICUB_FRONTEND_BASE_NAME}
-    env_file:
-      - .env
-    environment:
-      - PYICUB_FRONTEND_VERSION=${PYICUB_FRONTEND_VERSION}
-      - PYICUB_API_FRONTEND_PORT=${PYICUB_API_FRONTEND_PORT}
+    image: ${PYICUB_FRONTEND_IMAGE_NAME}
     network_mode: host
     depends_on:
       - pyicub
     profiles: ["frontend"]
 
   pyicub-test:
-    image: robot-gazebo:latest
+    image: ${PYICUB_IMAGE_NAME}
     gpus: all
     command: ["/bin/bash", "-c", "bash /var/scripts/runTests.sh"]
-    env_file:
-      - .env
     environment:
       - DISPLAY=${DISPLAY:?err}
       - PULSE_SERVER=unix:${XDG_RUNTIME_DIR:?err}/pulse/native
@@ -94,7 +75,8 @@ services:
       - LIBGL_ALWAYS_SOFTWARE=false
       - NVIDIA_VISIBLE_DEVICES=all
       - NVIDIA_DRIVER_CAPABILITIES=all
-    working_dir: /workdir
+    env_file:
+      - .env
     privileged: true
     stdin_open: true
     tty: true
@@ -118,5 +100,6 @@ services:
       - type: bind
         source: ./workdir
         target: /workdir
+  
     profiles: ["test"]
 

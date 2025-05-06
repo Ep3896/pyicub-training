@@ -8,16 +8,6 @@ if [ -z "$XDG_RUNTIME_DIR" ]; then
   mkdir -p $XDG_RUNTIME_DIR/dconf
 fi
 
-# Ensure DISPLAY is set
-if [ -z "$DISPLAY" ]; then
-  export DISPLAY=:0
-fi
-
-# Ensure XDG_DATA_DIRS is set
-if [ -z "$XDG_DATA_DIRS" ]; then
-  export XDG_DATA_DIRS="/usr/local/share:/usr/share:/var/lib/snapd/desktop"
-fi
-
 # Grant root access to X server
 
 xhost +local:root

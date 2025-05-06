@@ -1,8 +1,0 @@
-{
-	"build": 
-	{ 
-			"dockerfile": "Dockerfile",
-			"args": { "DOCKER_SRC": "${localEnv:DOCKER_SRC}", "PYICUB_VERSION": "${localEnv:PYICUB_VERSION}", "PYICUB_URL": "${localEnv:PYICUB_URL}", "PYICUB_BRANCH": "${localEnv:PYICUB_BRANCH}", "PYICUB_GIT_URL": "${localEnv:PYICUB_GIT_URL}" }
-	}
-  
-}
