@@ -1,10 +1,6 @@
 #!/bin/bash
 
-#echo "DOCKYMAN -> Running inizialization script (docker container)"
-
 source ${ROBOTOLOGY_SUPERBUILD_INSTALL_DIR}/share/robotology-superbuild/setup.sh
-
-python3 /root/pyicub/pyicub/proc/actionizer.py build --module apps.robot.actions --target /workdir/apps/robot/actions
 
 ICUB_HOSTS_ENTRY="$ICUB_IP icub-head"
 
@@ -17,6 +13,7 @@ else
   echo "iCub entry added to /etc/hosts"
 fi
 
+# Wait until icub head is reachable(ping icub-head), if timeout expires then exit with the err
 YARP_FORWARD_LOG_ENABLE=0 yarpserver --write &
 sleep 2
 

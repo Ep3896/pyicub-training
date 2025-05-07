@@ -52,6 +52,9 @@ RUN git clone ${PYICUB_APPS_URL} -b ${PYICUB_APPS_BRANCH} && \
     git checkout ${PYICUB_APPS_VERSION}
 
 # ─── PYTHONPATH ────────────────────────────────────────────────────
-ENV PYTHONPATH=/workdir/pyicub:/workdir
+ENV PYTHONPATH=/workspace/pyicub
+
+COPY ./icub-apps /workspace/icub-apps
+COPY ./scripts /workspace/scripts
 
 CMD ["bash"]
