@@ -45,9 +45,6 @@ services:
 
   pyicub-frontend:
     container_name: pyicub-frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
     image: ${PYICUB_FRONTEND_IMAGE_NAME}
     network_mode: host
     depends_on:
