@@ -1,18 +1,13 @@
 x-common-env: &common-environment
-  - DISPLAY=${DISPLAY:?err}
-  - PULSE_SERVER=unix:${XDG_RUNTIME_DIR:?err}/pulse/native
-  - PULSE_COOKIE=/run/pulse/cookie
-  - XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:?err}
-  - XDG_DATA_DIRS=${XDG_DATA_DIRS:?err}
-  - QT_X11_NO_MITSHM=1
-  - NO_AT_BRIDGE=1
-  - LIBGL_ALWAYS_SOFTWARE=false
+  DISPLAY: ${DISPLAY:?err}
+  PULSE_SERVER: unix:${XDG_RUNTIME_DIR:?err}/pulse/native
+  PULSE_COOKIE: /run/pulse/cookie
+  XDG_RUNTIME_DIR: ${XDG_RUNTIME_DIR:?err}
+  XDG_DATA_DIRS: ${XDG_DATA_DIRS:?err}
+  QT_X11_NO_MITSHM: "1"
+  NO_AT_BRIDGE: "1"
+  LIBGL_ALWAYS_SOFTWARE: "false"
 
-x-common-volumes: &common-volumes
-  - /tmp/.X11-unix:/tmp/.X11-unix
-  - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
-  - ${XDG_RUNTIME_DIR:?err}/pulse:${XDG_RUNTIME_DIR:?err}/pulse
-  - ${XDG_RUNTIME_DIR:?err}/dconf:${XDG_RUNTIME_DIR:?err}/dconf
 
 x-common-runtime: &common-runtime
   privileged: true
@@ -21,6 +16,35 @@ x-common-runtime: &common-runtime
   network_mode: host
   env_file:
     - .env
+
+# Fully flattened volumes for pyicub
+x-pyicub-volumes: &pyicub-volumes
+  - /tmp/.X11-unix:/tmp/.X11-unix
+  - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
+  - ${XDG_RUNTIME_DIR:?err}/pulse:${XDG_RUNTIME_DIR:?err}/pulse
+  - ${XDG_RUNTIME_DIR:?err}/dconf:${XDG_RUNTIME_DIR:?err}/dconf
+  - type: volume
+    source: pyicub-workspace
+    target: /workspace
+
+# Fully flattened volumes for frontend
+x-frontend-volumes: &frontend-volumes
+  - /tmp/.X11-unix:/tmp/.X11-unix
+  - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
+  - ${XDG_RUNTIME_DIR:?err}/pulse:${XDG_RUNTIME_DIR:?err}/pulse
+  - ${XDG_RUNTIME_DIR:?err}/dconf:${XDG_RUNTIME_DIR:?err}/dconf
+  - type: volume
+    source: pyicub-frontend-workspace
+    target: /workspace/pyicub-frontend
+
+# Common bind-mounts only (for test container)
+x-common-volumes: &common-volumes
+  - /tmp/.X11-unix:/tmp/.X11-unix
+  - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
+  - ${XDG_RUNTIME_DIR:?err}/pulse:${XDG_RUNTIME_DIR:?err}/pulse
+  - ${XDG_RUNTIME_DIR:?err}/dconf:${XDG_RUNTIME_DIR:?err}/dconf
+
+
 
 services:
 
@@ -33,14 +57,9 @@ services:
       args:
         DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME}
     image: ${PYICUB_IMAGE_NAME}
-    command: ["/bin/bash", "-c", "terminator & bash /workspace/scripts/runSetup.sh"]
+    command: ["/bin/bash", "-c", "terminator & bash /opt/scripts/runSetup.sh"]
     environment: *common-environment
-    volumes:
-  
-      - type: volume
-        source: pyicub-workspace
-        target: /workspace/pyicub
-
+    volumes: *pyicub-volumes
     profiles: ["backend"]
 
   pyicub-frontend:
@@ -49,20 +68,17 @@ services:
     network_mode: host
     depends_on:
       - pyicub
-    volumes:
-      - type: volume
-        source: pyicub-frontend-workspace
-        target: /workspace/pyicub-frontend
+    volumes: *frontend-volumes
     profiles: ["frontend"]
 
   pyicub-test:
     <<: *common-runtime
     image: ${PYICUB_IMAGE_NAME}
-    command: ["/bin/bash", "-c", "bash /workspace/scripts/runTests.sh"]
+    command: ["bash", "/opt/scripts/runTests.sh"]
     environment: *common-environment
     volumes: *common-volumes
     profiles: ["test"]
 
-
 volumes:
   pyicub-workspace:
+  pyicub-frontend-workspace:  
