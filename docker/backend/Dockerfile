@@ -55,6 +55,6 @@ RUN git clone ${PYICUB_APPS_URL} -b ${PYICUB_APPS_BRANCH} && \
 ENV PYTHONPATH=/workspace/pyicub
 
 COPY ./icub-apps /workspace/icub-apps
-COPY ./scripts /workspace/scripts
+COPY ./scripts /opt/scripts
 
 CMD ["bash"]

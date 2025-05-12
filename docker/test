@@ -22,14 +22,14 @@ xhost +local:root
 
 # 1. Clean state (remove only containers, not volumes)
 echo "Bringing down any running containers (preserving volumes)..."
-COMPOSE_PROFILES=robotology,backend,frontend docker compose down --remove-orphans
+COMPOSE_PROFILES=backend,frontend docker compose down --remove-orphans
 
 # 2. Build
 echo "Building base images..."
-COMPOSE_PROFILES=robotology,backend,frontend docker compose build
+COMPOSE_PROFILES=backend,frontend docker compose build
 
 # 3. Start up
 echo "Starting up the stack using compose.yaml..."
-COMPOSE_PROFILES=robotology,test docker compose up
+COMPOSE_PROFILES=test docker compose up
 
-COMPOSE_PROFILES=robotology,test docker compose down --remove-orphans
+COMPOSE_PROFILES=test docker compose down --remove-orphans
