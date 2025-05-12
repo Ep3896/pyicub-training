@@ -6,7 +6,7 @@
 
     <module>
         <name>gzserver</name>
-        <parameters>/workdir/apps/gazebo/icub-world.sdf</parameters>
+        <parameters>/workspace/icub-apps/gazebo/icub-world.sdf</parameters>
         <node>$ENV{ICUBSRV_NODE}</node>
     </module>
 
