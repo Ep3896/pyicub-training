@@ -15,7 +15,7 @@ else
   echo "iCub entry added to /etc/hosts"
 fi
 
-cd /root/pyicub || exit 1
+cd /workspace/pyicub || exit 1
 sleep 2
 
 #Disable YARP logging to avoid clutter
@@ -27,7 +27,7 @@ yarprun --server /$ICUBSRV_NODE --log >/dev/null 2>&1 &
 
 sleep 2
 
-gzserver /workdir/apps/gazebo/icub-world.sdf >/dev/null 2>&1 &
+gzserver /workspace/icub-apps/gazebo/icub-world.sdf >/dev/null 2>&1 &
 sleep 2
 
 yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
