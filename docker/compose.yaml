@@ -49,7 +49,7 @@ services:
       args:
         DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME}
     image: ${PYICUB_IMAGE_NAME}
-    command: ["/bin/bash", "-c", "terminator & bash /opt/scripts/runSetup.sh"]
+    command: ["/bin/bash", "-c", "terminator & bash /workspace/scripts/runSetup.sh"]
     environment: *common-environment
     volumes: *pyicub-volumes
     profiles: ["backend"]
@@ -72,7 +72,7 @@ services:
   pyicub-test:
     <<: *common-runtime
     image: ${PYICUB_IMAGE_NAME}
-    command: ["bash", "/opt/scripts/runTests.sh"]
+    command: ["bash", "/workspace/scripts/runTests.sh"]
     environment: *common-environment
     volumes: *common-volumes
     profiles: ["test"]
