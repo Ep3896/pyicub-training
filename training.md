@@ -90,12 +90,18 @@ git checkout -b feature/add-print-version
 ```python
 def print_version():
     """Prints the current version of the library."""
-    print(pyicub.__version__)
+    print(f"pyicub version: {__version__}")
 ```
 
 ### 3.3 Follow coding conventions:
 
-Run these linters inside the container:
+At the beginning, please install the following packages:
+
+```bash 
+pip3 install flake8 mypy
+```
+
+Then these linters inside the container:
 
 ```bash
 flake8 pyicub/
@@ -105,6 +111,8 @@ mypy pyicub/
 Ensure your code is clean, typed, and correctly formatted.
 
 ### 3.4 Commit your changes:
+
+Warning!: GitHub access is not configured, so please check the [Appendix](#appendix-configure-github-ssh-access-inside-the-container) to configure it in the container.
 
 ```bash
 git add pyicub/__init__.py
@@ -122,10 +130,10 @@ import pytest
 
 @pytest.mark.smoke
 def test_print_version(capsys):
-    from pyicub import print_version
-    print_version()
+    import pyicub
+    pyicub.print_version()
     captured = capsys.readouterr()
-    assert "pyicub version: 0.3.0" in captured.out
+    assert pyicub.__version__ in captured.out
 ```
 
 ### 4.2 Run your test:
@@ -143,6 +151,8 @@ pytest -m integration
 ```
 
 ---
+
+Then if the test is passed, add and commit (try by yourself).
 
 ## 5. Rebasing, Commit Hygiene & Merging (10 minutes)
 
@@ -165,6 +175,7 @@ Resolve conflicts if necessary. Then:
 ```bash
 git push --force-with-lease
 ```
+it The command `git push --force-with-lease` is a safer alternative to the more aggressive `git push --force`. It is used to overwrite changes on a remote branch with your local branch's changes, but with an additional safeguard to prevent accidentally overwriting someone else's work.
 
 ### 5.3 Push your feature branch:
 
@@ -233,3 +244,54 @@ Optional Reflection Topics:
 ---
 
 This document serves as the backbone of your workshop. Each section is meant to be followed hands-on by every participant, ensuring they walk away with a solid grasp of the real `pyicub` dev lifecycle.
+
+---
+
+## Appendix: Configure GitHub SSH Access Inside the Container
+
+Follow these steps **inside the Docker container**:
+
+
+### 1. Configure Git User Id 
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "your_email@example.com"
+```
+
+### 2. Generate SSH Key
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
+
+Press Enter through the prompts to use the default location.
+
+### 3. Start SSH Agent and Add the Key
+```bash
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+```
+
+### 4. Copy Your Public Key
+```bash
+cat ~/.ssh/id_ed25519.pub
+```
+
+Copy the output.
+
+### 5. Add the Key to GitHub
+- Go to [GitHub → Settings → SSH and GPG keys](https://github.com/settings/keys)
+- Click **New SSH key**
+- Paste the copied key and save
+
+### 6. Switch Remote to SSH
+```bash
+git remote set-url origin git@github.com:Ep3896/pyicub-training.git
+```
+
+### 7. Test Access (Optional)
+```bash
+ssh -T git@github.com
+```
+
+You should see a success message. Now you can push without entering a username/password.
