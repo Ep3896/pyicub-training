@@ -27,19 +27,11 @@ x-pyicub-volumes: &pyicub-volumes
     source: pyicub-workspace
     target: /workspace
 
-# Fully flattened volumes for frontend
-x-frontend-volumes: &frontend-volumes
-  - /tmp/.X11-unix:/tmp/.X11-unix
-  - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
-  - ${XDG_RUNTIME_DIR:?err}/pulse:${XDG_RUNTIME_DIR:?err}/pulse
-  - ${XDG_RUNTIME_DIR:?err}/dconf:${XDG_RUNTIME_DIR:?err}/dconf
-  - type: volume
-    source: pyicub-frontend-workspace
-    target: /workspace/pyicub-frontend
+
 
 # Common bind-mounts only (for test container)
 x-common-volumes: &common-volumes
-  - /tmp/.X11-unix:/tmp/.X11-unix
+  - /tmp/.X11-unix:/tmp/.X11-unixs
   - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
   - ${XDG_RUNTIME_DIR:?err}/pulse:${XDG_RUNTIME_DIR:?err}/pulse
   - ${XDG_RUNTIME_DIR:?err}/dconf:${XDG_RUNTIME_DIR:?err}/dconf
@@ -64,11 +56,17 @@ services:
 
   pyicub-frontend:
     container_name: pyicub-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     image: ${PYICUB_FRONTEND_IMAGE_NAME}
     network_mode: host
     depends_on:
       - pyicub
-    volumes: *frontend-volumes
+    volumes: 
+      - type: volume
+        source: pyicub-frontend-workspace
+        target: /workspace/pyicub-frontend
     profiles: ["frontend"]
 
   pyicub-test:

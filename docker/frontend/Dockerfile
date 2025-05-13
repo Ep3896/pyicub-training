@@ -31,20 +31,11 @@ ARG PYICUB_API_FRONTEND_PORT=9000
 # Set environment variable for CMD to access at runtime
 ENV PYICUB_API_FRONTEND_PORT=${PYICUB_API_FRONTEND_PORT}
 
-# Create app directory
-RUN mkdir -p /app/pyicub-frontend
-WORKDIR /app
 
-# Clone the repository
-RUN git clone https://github.com/s4hri/pyicub-frontend tmp \
- && cd tmp \
- && git checkout ${PYICUB_FRONTEND_VERSION} \
- && cp -a . /app/pyicub-frontend \
- && cd .. \
- && rm -rf tmp
+WORKDIR /workspace/pyicub-frontend
 
-# Install dependencies
-WORKDIR /app/pyicub-frontend
+COPY ./pyicub-frontend/ /workspace/pyicub-frontend
+
 RUN npm install
 
 # Run the frontend on given port
