@@ -36,13 +36,18 @@ Understand the goals and workflow of this workshop.
 
 ```bash
 git clone https://github.com/Ep3896/pyicub-training.git
-cd pyicub-training
+cd pyicub-training/docker
 ```
 
-2. **Run the environment using the provided script**:
+2. **Build and Run the environment using the provided script**:
+
 
 ```bash
-./docker/go
+bash build
+```
+
+```bash
+bash go
 ```
 
 This script will:
