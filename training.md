@@ -90,7 +90,7 @@ git checkout -b feature/add-print-version
 ```python
 def print_version():
     """Prints the current version of the library."""
-    print("pyicub version: 0.3.0")
+    print(__version__)
 ```
 
 ### 3.3 Follow coding conventions:
