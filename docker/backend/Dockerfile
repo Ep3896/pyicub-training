@@ -26,7 +26,7 @@
 ARG DOCKER_SRC=ubuntu:latest
 FROM $DOCKER_SRC
 
-WORKDIR /workspace
+WORKDIR /workspace 
 
 ENV PATH=$PATH:/root/.local/bin
 

@@ -1,0 +1,3 @@
+[submodule "docker/frontend/pyicub-frontend"]
+	path = docker/frontend/pyicub-frontend
+	url = https://github.com/s4hri/pyicub-frontend
