@@ -1,0 +1,40 @@
+<!-- il controllo su width ed height serve per attendere che le dimensioni del container nella griglia siano state definite prima di procedere col rendering dei nodi-->
+<graphy-ng *ngIf="width && height && !isLoading; else elseBlock">
+
+  <ng-container *defsTemplate>
+    <svg>
+      <marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="6" markerHeight="6" orient="auto">
+        <path d="M0,-5L10,0L0,5 z"></path>
+      </marker>
+    </svg>
+  </ng-container>
+
+  <ng-container *nodeTemplate="let node; nodes: nodes">
+    <svg (click)="onNodeClick(node)" overflow="visible" [matTooltip]="node.data.description" [matTooltipShowDelay]="1000">
+      <rect rx="10" ry="10" [attr.width]="node._width" [attr.height]="node._height" [style.fill]="nodeColors[node.data.state]" [attr.opacity]="node.data.state == NodeStatus.INACTIVE ? 0.3 : 1" stroke="black" stroke-width="2"></rect>
+      <!-- Centra il testo sia orizzontalmente che verticalmente -->
+      <text text-anchor="middle" dominant-baseline="central" [attr.x]="node._width / 2" [attr.y]="node._height / 2" [attr.opacity]="node.data.state == NodeStatus.INACTIVE ? 0.3 : 1" >{{ node.data.name }}</text>
+    </svg>
+  </ng-container>
+
+  <ng-container *edgeTemplate="let edge; edges: edges">
+    <svg overflow="visible">
+      <g class="edge" [style.opacity]="isEdgeActive(edge) ? 1 : 0.3">
+        <path
+          class="edge__line"
+          [attr.d]="edge.pathDefinition"
+          marker-end="url(#arrow)"
+        />
+      </g>
+    </svg>
+  </ng-container>
+</graphy-ng>
+
+<ng-template #elseBlock>
+  <div  style="display:flex;height:100%;width:100%;align-items: center;justify-content: center">
+    <mat-spinner/>
+  </div>
+</ng-template>
+
+<app-widget-error-dialog [style.display]="showErrorDialog ? 'block' : 'none'" [messageError]="errorMessage" (buttonClick)="closeErrorDialog()" />
+

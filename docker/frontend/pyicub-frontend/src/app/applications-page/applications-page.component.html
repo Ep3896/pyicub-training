@@ -1,0 +1,15 @@
+<mat-grid-list *ngIf="!(appState.isLoadingRobots$ | async);else elseBlock" [cols]="gridColsNumber" class="grid" gutterSize="2%" rowHeight="166:121">
+  <mat-grid-tile  *ngFor="let application of (selectedRobot$ | async).applications" style="box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.24);;border-radius: 1vw;">
+    <button (click)="onApplicationClick(application)" class="application-cell-container">
+      <img src="assets/applicationIcon.png" alt="application Icon" class="application-cell-image"/>
+      <p class="application-cell-primaryText">{{application.name}}</p>
+      <p>{{application.description}}</p>
+    </button>
+  </mat-grid-tile>
+</mat-grid-list>
+
+<ng-template #elseBlock>
+  <div  style="display:flex;height:100%;width:100%;align-items: center;justify-content: center">
+    <mat-spinner/>
+  </div>
+</ng-template>

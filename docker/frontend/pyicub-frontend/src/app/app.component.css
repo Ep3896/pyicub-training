@@ -1,0 +1,99 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.drawer-container{
+  position:relative;
+  display: flex;
+  flex:1;
+}
+
+.drawer{
+  position:absolute;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 200px;
+  width:18vw;
+  background-color: rgb(119,161,215);
+  top:5%;
+  bottom:5%;
+  border-radius: 1vmax;
+
+}
+
+.drawer-robotCellContainer{
+  margin:0%;
+  aspect-ratio: 181/52;
+  width:100%;
+  box-sizing: border-box;
+}
+
+.app-bar{
+  position:relative;
+  box-sizing: border-box;
+  display: flex;
+  background-color: rgb(119,161,215);
+}
+
+.app-bar-CellContainer{
+  aspect-ratio: 181/52;
+  height:80%;
+  margin-right:20px;
+}
+
+@media (max-width: 640px){
+  .app-bar-CellContainer{
+    height:60%;
+  }
+}
+
+.page-container{
+  display: flex;
+  flex-direction: column;
+  flex:1;
+  height: 100%;
+  width: 100%;
+}
+
+.spinner-container{
+  height:100%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.reload-button-container{
+  display:flex;
+  width:100%;
+  margin-top:1vw;
+  justify-content: center;
+  align-items: center;
+}
+
+.reload-button{
+  background-color: white;
+  width:12%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+}
+
+.reload-button-image{
+  width:70%;
+  aspect-ratio: 1;
+}
+
+.reload-button:hover{
+  background-color: #dfdfdf;
+  cursor:pointer;
+}
+
+.reload-button:active{
+  transform: scale(0.99);
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.10);
+}
+
+

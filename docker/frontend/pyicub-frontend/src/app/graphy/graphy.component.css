@@ -1,0 +1,40 @@
+:host {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.graph {
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  touch-action: none;
+  overflow: visible;
+}
+
+.graph-container {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.node {
+  visibility: hidden;
+
+  &.is-visible {
+    visibility: visible;
+  }
+}
+
+.edge {
+  fill: transparent;
+  overflow: visible;
+}
+
+.edges-container{
+  width:100%;
+  height:100%;
+  background-color: orange;
+  overflow: visible;
+}

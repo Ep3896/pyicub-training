@@ -1,0 +1,90 @@
+<ng-container *ngIf="!isLoading;else elseBlock">
+  <div style="width:100%;height:100%;display:flex;flex-direction: column">
+    <mat-form-field subscriptSizing="dynamic" appearance="outline" style="width:100%;background-color: white;padding:5px;box-sizing: border-box">
+      <input matInput [(ngModel)]="search" placeholder="Search service..." >
+      <span matSuffix><mat-icon style="margin-right:10px">search</mat-icon></span>
+    </mat-form-field>
+    <div class="widget-container">
+      <div *ngIf="services.length !== 0; else emptyActionsBlock" style="display:flex;flex-direction: column;align-items: flex-start;justify-content: center;">
+        <ng-container *ngFor="let service of filteredServices">
+
+          <div [ngSwitch]="hasArguments(service)">
+            <button *ngSwitchCase=false mat-button class="action-button" (click)="onServiceClick(service)"
+                    [style.background-color]="nodeColors[service.state]"
+                    [style.opacity]="service.state == ServiceState.INACTIVE ? 0.5 : 1"
+                    [disabled]="service.state !== ServiceState.ACTIVE">
+              <p class="action-text">{{service.name}}</p>
+            </button>
+
+
+              <mat-expansion-panel [disabled]="service.state === ServiceState.INACTIVE" *ngSwitchCase=true class="action-button-form" [style.opacity]="service.state == ServiceState.INACTIVE ? 0.5 : 1" [style.background-color]="nodeColors[service.state]" style="box-shadow: 0px 0px 0px 0px;">
+                <!-- #enddocregion hide-toggle -->
+                <mat-expansion-panel-header class="action-text"> {{service.name}}</mat-expansion-panel-header>
+
+                <form style="padding-top:5px;padding-bottom:5px">
+                  <div *ngFor="let arg of Object.keys(service.argsTemplate)">
+                    <div [ngSwitch]="service.argsTemplate[arg].type">
+
+                      <!-- Caso STRING -->
+                      <mat-form-field *ngSwitchCase="ApplicationArgType.STRING" appearance="outline">
+                        <mat-label>{{arg}}</mat-label>
+                        <input matInput type="text" [(ngModel)]="service.args[arg]" name="{{arg}}_InputString" placeholder="Type something...">
+                      </mat-form-field>
+
+                      <!-- Caso NUMBER -->
+                      <mat-form-field *ngSwitchCase="ApplicationArgType.NUMBER" appearance="outline">
+                        <mat-label>{{arg}}</mat-label>
+                        <input matInput type="number" [(ngModel)]="service.args[arg]" name="{{arg}}_InputNumber" placeholder="0">
+                      </mat-form-field>
+
+                      <!-- Caso BOOLEAN -->
+                      <div *ngSwitchCase="ApplicationArgType.BOOLEAN">
+                        <mat-checkbox [(ngModel)]="service.args[arg]" name="{{arg}}_checkbox">{{arg}}</mat-checkbox>
+                      </div>
+
+                      <!-- Caso ARRAY_NUMBER -->
+                      <mat-form-field *ngSwitchCase="ApplicationArgType.ARRAY_NUMBER" appearance="outline">
+                        <mat-label>{{arg}}</mat-label>
+                        <mat-select [(ngModel)]="service.args[arg]" name="{{arg}}_ArrayNumber">
+                          <mat-option *ngFor="let option of service.argsTemplate[arg].value" [value]="option">{{option}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                      <!-- Caso ARRAY_STRING -->
+                      <mat-form-field *ngSwitchCase="ApplicationArgType.ARRAY_STRING" appearance="outline">
+                        <mat-label>{{arg}}</mat-label>
+                        <mat-select [(ngModel)]="service.args[arg]" name="{{arg}}_ArrayString">
+                          <mat-option *ngFor="let option of service.argsTemplate[arg].value" [value]="option">{{option}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+
+                    </div>
+                  </div>
+                </form>
+
+                <button mat-button (click)="onServiceClick(service)" [disabled]="!canRunService(service) || service.state!==ServiceState.ACTIVE">
+                  RUN SERVICE
+                </button>
+
+              </mat-expansion-panel>
+          </div>
+
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #elseBlock>
+  <div style="display:flex;height:100%;width:100%;align-items: center;justify-content: center">
+    <mat-spinner/>
+  </div>
+</ng-template>
+
+<ng-template #emptyActionsBlock>
+  <div  style="display:flex;height:100%;width:100%;align-items: center;justify-content: center;">
+    There are no services for this application.
+  </div>
+</ng-template>
+
+<app-widget-error-dialog [style.display]="showErrorDialog ? 'block' : 'none'" [messageError]="errorMessage" (buttonClick)="closeErrorDialog()" />

@@ -1,0 +1,13 @@
+<div  class="plugins-grid-container">
+  <gridster [options]="options" style="background-color: rgb(242,242,242)">
+    <gridster-item class="gridster-item-container" *ngFor="let plugin of application.enabledPlugins$ | async" [item]="{x:plugin.x,y:plugin.y,cols:plugin.cols,rows:plugin.rows,id:plugin.id}">
+      <div class="widget-title">
+        <p class="widget-title-text">{{plugin.name}}</p>
+      </div>
+      <mat-card class="gridster-item-content drag-handler" >
+        <ng-container *ngComponentOutlet="plugin.component; inputs:{application:application,plugin:plugin,width:itemsSize[plugin.id]?.width,height:itemsSize[plugin.id]?.height}"></ng-container>
+      </mat-card>
+    </gridster-item>
+  </gridster>
+</div>
+

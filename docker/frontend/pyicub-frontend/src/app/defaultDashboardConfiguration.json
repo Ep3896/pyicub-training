@@ -1,0 +1,46 @@
+{
+  "Actions Manager":
+  {
+    "x":72,
+    "y":47,
+    "cols":28,
+    "rows":53,
+    "enabled":true
+  },
+  
+  "Finite State Machine":
+  {
+    "x":0,
+    "y":47,
+    "cols":72,
+    "rows":53,
+    "enabled":true
+  },
+  
+  "Robot Cam Viewer":
+  {
+    "x":31,
+    "y":0,
+    "cols":41,
+    "rows":47,
+    "enabled":true
+  },
+  
+  "Robot Speech":
+  {
+    "x":0,
+    "y":0,
+    "cols":31,
+    "rows":47,
+    "enabled":true
+  },
+  
+  "Services Manager":
+  {
+    "x":72,
+    "y":0,
+    "cols":28,
+    "rows":47,
+    "enabled":true
+    }
+}

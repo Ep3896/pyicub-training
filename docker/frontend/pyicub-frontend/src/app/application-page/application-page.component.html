@@ -1,0 +1,25 @@
+<div *ngIf="!(appState.isLoadingRobots$ | async);else elseBlock" style="width:100%;height:100%;display:flex;flex-direction: column;background-color: rgb(242,242,242)">
+  <div style="display: flex;justify-content: flex-end">
+    <button mat-fab extended (click)="onSaveClick()" color="white" class="application-action-button optional-xs-button">
+      <mat-icon>save</mat-icon>
+      Save Dashboard
+    </button>
+    <button mat-fab extended (click)="toggleEditMode()" color="white" class="application-action-button optional-xs-button" >
+      <mat-icon>edit</mat-icon>
+       {{editModeEnabled ? "Disable" : "Enable"}} Edit Mode
+    </button>
+    <button mat-fab extended (click)="onClick()" color="white" class="application-action-button">
+      <mat-icon>apps</mat-icon>
+      Plugins
+    </button>
+  </div>
+  <div style="flex:1">
+    <app-dashboard *ngIf="canShowApplication" [application]="application" [editModeEnabled]="editModeEnabled"></app-dashboard>
+  </div>
+</div>
+
+<ng-template #elseBlock>
+  <div  style="display:flex;height:100%;width:100%;align-items: center;justify-content: center">
+    <mat-spinner/>
+  </div>
+</ng-template>

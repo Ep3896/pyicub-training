@@ -1,0 +1,16 @@
+<div class="dialog-container">
+
+</div>
+<mat-card class="dialog">
+  <mat-card-header>
+    <mat-card-title class="title-text">{{title || "Errore"}}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p class="content-text">
+      {{messageError}}
+    </p>
+  </mat-card-content>
+  <mat-card-actions  style="margin-top:auto" align="end">
+    <button (click)="onClick()" mat-button>OK</button>
+  </mat-card-actions>
+</mat-card>

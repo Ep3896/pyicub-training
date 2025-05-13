@@ -1,0 +1,19 @@
+<div class="widget-container">
+
+  <div *ngIf="!isLoading; else elseBlock" class="cam-view-container">
+    <iframe style="pointer-events:none;" [src]="rightCamURI" [width]="camImgWidth" [height]="camImgHeight"></iframe>
+  </div>
+
+  <ng-template #elseBlock>
+    <div style="display:flex;height:100%;width:100%;align-items: center;justify-content: center">
+      <mat-spinner/>
+    </div>
+  </ng-template>
+
+</div>
+
+<app-widget-error-dialog [style.display]="showErrorDialog ? 'block' : 'none'" [messageError]="errorMessage"
+                         (buttonClick)="closeErrorDialog()"/>
+
+
+

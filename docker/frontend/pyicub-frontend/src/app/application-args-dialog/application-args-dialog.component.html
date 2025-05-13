@@ -1,0 +1,48 @@
+<h1 mat-dialog-title>Parameters selection</h1>
+<div mat-dialog-content>
+
+  <form style="padding-top:5px;padding-bottom:5px">
+    <div *ngFor="let arg of Object.keys(data.argsTemplate)">
+      <div [ngSwitch]="data.argsTemplate[arg].type">
+
+        <!-- Caso STRING -->
+        <mat-form-field *ngSwitchCase="ApplicationArgType.STRING" appearance="outline">
+          <mat-label>{{arg}}</mat-label>
+          <input matInput type="text" [(ngModel)]="args[arg]" name="{{arg}}_InputString" placeholder="Type something...">
+        </mat-form-field>
+
+        <!-- Caso NUMBER -->
+        <mat-form-field *ngSwitchCase="ApplicationArgType.NUMBER" appearance="outline">
+          <mat-label>{{arg}}</mat-label>
+          <input matInput type="number" [(ngModel)]="args[arg]" name="{{arg}}_InputNumber" placeholder="0">
+        </mat-form-field>
+
+        <!-- Caso BOOLEAN -->
+        <div *ngSwitchCase="ApplicationArgType.BOOLEAN">
+          <mat-checkbox [(ngModel)]="args[arg]" name="{{arg}}_checkbox">{{arg}}</mat-checkbox>
+        </div>
+
+        <!-- Caso ARRAY_NUMBER -->
+        <mat-form-field *ngSwitchCase="ApplicationArgType.ARRAY_NUMBER" appearance="outline">
+          <mat-label>{{arg}}</mat-label>
+          <mat-select [(ngModel)]="args[arg]" name="{{arg}}_ArrayNumber">
+            <mat-option *ngFor="let option of data.argsTemplate[arg].value" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <!-- Caso ARRAY_STRING -->
+        <mat-form-field *ngSwitchCase="ApplicationArgType.ARRAY_STRING" appearance="outline">
+          <mat-label>{{arg}}</mat-label>
+          <mat-select [(ngModel)]="args[arg]" name="{{arg}}_ArrayString">
+            <mat-option *ngFor="let option of data.argsTemplate[arg].value" [value]="option">{{option}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+      </div>
+    </div>
+  </form>
+
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-button cdkFocusInitial (click)="onButtonClick()" [disabled]="!buttonEnabled" >Ok</button>
+</div>

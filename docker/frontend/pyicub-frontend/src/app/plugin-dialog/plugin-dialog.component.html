@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Plugins</h1>
+<div mat-dialog-content>
+  <ul style="list-style-type: none;">
+    <li *ngFor="let plugin of data.plugins">
+      <mat-checkbox [checked]="plugin.enabled" (click)="onCheckboxChange(plugin)" >{{plugin.name}}</mat-checkbox>
+    </li>
+  </ul>
+</div>
+<div mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close cdkFocusInitial>Ok</button>
+</div>
+

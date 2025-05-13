@@ -1,0 +1,73 @@
+.application-cell-container{
+  container-type: inline-size;
+  width:100%;
+  height: 100%;
+  padding:3%;
+  box-sizing: border-box;
+  display: flex;
+  background-color: white;
+  border-radius: 5%/17.5%;
+  box-shadow: 7px 6px 28px 1px rgba(0, 0, 0, 0.24);
+  transition: background-color 0.2s ease;
+}
+
+.application-cell-container:hover{
+  background-color: #dfdfdf;
+  cursor:pointer;
+}
+
+.application-cell-container:active{
+  transform: scale(0.99);
+  box-shadow: 3px 2px 22px 1px rgba(0, 0, 0, 0.24);
+}
+
+.application-cell-image{
+  height:100%;
+  aspect-ratio: 1;
+  background-color: #FFECC2;
+  padding:3%;
+  border-radius: 50%;
+  box-sizing: border-box;
+}
+
+.application-cell-textContainer{
+  display:flex;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  height:100%;
+  width:100%;
+  box-sizing: border-box;
+  padding-left:3%;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.application-cell-primaryText{
+  text-align: left;
+  color: black;
+  font-size: 16px;
+  font-family: Roboto, Helvetica Neue, sans-serif;
+  font-weight: bold;
+}
+
+@container (max-width: 199px) {
+  .application-cell-primaryText{
+    font-size: 10cqw;
+  }
+
+  .application-cell-secondaryText{
+    font-size:4cqw
+  }
+
+}
+
+@container (min-width: 200px) {
+  .application-cell-primaryText{
+    font-size: 10cqw;
+  }
+
+  .application-cell-secondaryText{
+    font-size:4cqw
+  }
+
+}

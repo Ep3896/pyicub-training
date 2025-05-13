@@ -1,0 +1,43 @@
+<div class="graph">
+  <svg [style.width]="width" [style.height]="height" [attr.viewBox]="_stringifiedViewBox$ | async" #graphContainer>
+
+    <defs class="defs">
+      <ng-container
+        *ngIf="_defsTemplate"
+        [ngTemplateOutlet]="_defsTemplate.template"
+      ></ng-container>
+    </defs>
+
+    <ng-content></ng-content>
+    <g class="edges-container" #edgesContainer>
+      <g
+        *ngFor="let edge of transformedEdges; trackBy: _trackById"
+        class="edge"
+        [id]="edge.id"
+        #edge
+      >
+        <ng-container
+          [ngTemplateOutlet]="_edgeTemplate.template"
+          [ngTemplateOutletContext]="{ $implicit: edge }"
+        ></ng-container>
+      </g>
+    </g>
+
+    <g class="nodes-container" #nodesContainer>
+      <g
+        *ngFor="let node of transformedNodes; trackBy: _trackById"
+        class="node"
+        [id]="node.id"
+        [class.is-visible]="node._isVisible"
+        [attr.transform]="node._transform"
+        #node
+      >
+        <ng-container
+          [ngTemplateOutlet]="_nodeTemplate.template"
+          [ngTemplateOutletContext]="{ $implicit: node }"
+        ></ng-container>
+      </g>
+    </g>
+
+  </svg>
+</div>
