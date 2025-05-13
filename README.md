@@ -1,3 +1,10 @@
+# Training session of 14th of May
+
+For training, please refer to the following [documentation](./training.md)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 ![PYICUB logo](media/pyicub-logo.png?raw=true)
 ====
 
