@@ -159,15 +159,15 @@ Then if the test is passed, add and commit (try by yourself).
 ### 5.1 Sync with master:
 
 ```bash
-git checkout master
-git pull origin master
+git checkout main
+git pull origin main
 ```
 
 ### 5.2 Rebase your branch:
 
 ```bash
 git checkout feature/add-print-version
-git rebase master
+git rebase main
 ```
 
 Resolve conflicts if necessary. Then:
