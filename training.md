@@ -183,16 +183,13 @@ git pull --rebase origin feature/add-print-version
 ```
 This command fetches the latest changes from the remote branch and rebases your local branch on top of it. It helps to integrate the latest updates while maintaining a clean commit history.
 
-```bash
-git push --force-with-lease
-```
-This command force-pushes your rebased branch to the remote repository while ensuring no unexpected changes are overwritten. It is used to update the remote branch after a rebase.
-
 ### 5.3 Push your feature branch:
 
 ```bash
-git push origin feature/add-print-version
+git push origin feature/add-print-version --force-with-lease
 ```
+This command force-pushes your rebased branch to the remote repository while ensuring no unexpected changes are overwritten. It is used to update the remote branch after a rebase.
+
 
 ---
 
