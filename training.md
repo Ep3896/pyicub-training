@@ -69,7 +69,7 @@ This script will:
 4. **Validate setup**:
 
 ```bash
-cd /pyicub
+cd pyicub/
 pytest -m smoke
 ```
 
