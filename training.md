@@ -176,6 +176,17 @@ Resolve conflicts if necessary. Then:
 git add .
 git commit -m "Feature: add print_version utility test"
 ```
+This block stages all changes in the current directory and commits them with a descriptive message. It ensures that your changes are saved locally in the Git history.
+
+```bash
+git pull --rebase origin feature/add-print-version
+```
+This command fetches the latest changes from the remote branch and rebases your local branch on top of it. It helps to integrate the latest updates while maintaining a clean commit history.
+
+```bash
+git push --force-with-lease
+```
+This command force-pushes your rebased branch to the remote repository while ensuring no unexpected changes are overwritten. It is used to update the remote branch after a rebase.
 
 ### 5.3 Push your feature branch:
 
@@ -212,6 +223,8 @@ Assign reviewers. Reviewers will:
 ### Added
 - `print_version()` utility function to display the current library version.
 ```
+
+this is an [example](https://github.com/moveit/moveit/blob/master/moveit_core/CHANGELOG.rst) of how to structure it
 
 ### 7.2 Merge the PR
 
