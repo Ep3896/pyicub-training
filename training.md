@@ -177,11 +177,6 @@ git add .
 git commit -m "Feature: add print_version utility test"
 ```
 
-```bash
-git push --force-with-lease
-```
-it The command `git push --force-with-lease` is a safer alternative to the more aggressive `git push --force`. It is used to overwrite changes on a remote branch with your local branch's changes, but with an additional safeguard to prevent accidentally overwriting someone else's work.
-
 ### 5.3 Push your feature branch:
 
 ```bash
