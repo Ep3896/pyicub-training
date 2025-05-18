@@ -9,7 +9,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      COMPOSE_PROFILES: test
+      COMPOSE_PROFILES: test  # Enable only the pyicub-test profile
 
     steps:
     - name: Checkout repository
@@ -17,6 +17,7 @@ jobs:
 
     - name: Run pyicub-test using Docker Compose
       run: |
+        cd docker
         docker compose --profile test up --abort-on-container-exit pyicub-test
 
     - name: Upload test results if present
