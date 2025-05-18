@@ -3,13 +3,13 @@ name: CI - Pyicub Tests
 on:
   push:
     branches:
-      - CI  # 👈 Runs only on pushes to the "CI" branch
+      - CI  # Trigger only on push to the "CI" branch
 
 jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      COMPOSE_PROFILES: test  # Activate only the pyicub-test profile
+      COMPOSE_PROFILES: test
 
     steps:
     - name: Checkout repository
@@ -21,7 +21,7 @@ jobs:
 
     - name: Upload test results if present
       if: success() || failure()
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: test-results
         path: docker/results/result.xml
