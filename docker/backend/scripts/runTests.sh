@@ -15,7 +15,9 @@ else
   echo "iCub entry added to /etc/hosts"
 fi
 
-cd /workspace/pyicub-training || exit 1
+mv pyicub-training/ pyicub/
+
+cd /workspace/pyicub|| exit 1
 sleep 2
 
 #Disable YARP logging to avoid clutter
