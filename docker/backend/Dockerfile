@@ -36,7 +36,7 @@ ARG PYICUB_BRANCH=master
 ARG PYICUB_VERSION=master
 
 RUN git clone ${PYICUB_URL} -b ${PYICUB_BRANCH} && \
-    cd pyicub && \
+    cd pyicub-training && \
     if [ "${PYICUB_URL}" = "https://github.com/s4hri/pyicub" ]; then \
         git checkout ${PYICUB_VERSION}; \
     fi && \

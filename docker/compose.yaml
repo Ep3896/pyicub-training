@@ -48,6 +48,8 @@ services:
       dockerfile: Dockerfile
       args:
         DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME}
+        PYICUB_URL: ${PYICUB_URL}
+        PYICUB_BRANCH: ${PYICUB_BRANCH}
     image: ${PYICUB_IMAGE_NAME}
     command: ["/bin/bash", "-c", "terminator & bash /workspace/scripts/runSetup.sh"]
     environment: *common-environment
@@ -71,7 +73,13 @@ services:
 
   pyicub-test:
     <<: *common-runtime
-    image: ${PYICUB_IMAGE_NAME}
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME}
+        PYICUB_URL: ${PYICUB_URL}
+        PYICUB_BRANCH: ${PYICUB_BRANCH}
     command: ["bash", "/workspace/scripts/runTests.sh"]
     environment: *common-environment
     volumes: *common-volumes
