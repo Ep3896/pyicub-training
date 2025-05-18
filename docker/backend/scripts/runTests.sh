@@ -32,7 +32,8 @@ sleep 2
 gzserver /workspace/icub-apps/gazebo/icub-world.sdf >/dev/null 2>&1 &
 sleep 2
 
-yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
+echo "yarprobot interface ..."
+yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim #>/dev/null 2>&1 &
 
 sleep 4
 
