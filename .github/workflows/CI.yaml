@@ -1,0 +1,27 @@
+name: CI - Pyicub Tests
+
+on:
+  push:
+    branches:
+      - CI  # 👈 Runs only on pushes to the "CI" branch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE_PROFILES: test  # Activate only the pyicub-test profile
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Run pyicub-test using Docker Compose
+      run: |
+        docker compose --profile test up --abort-on-container-exit pyicub-test
+
+    - name: Upload test results if present
+      if: success() || failure()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-results
+        path: docker/results/result.xml
