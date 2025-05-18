@@ -36,9 +36,9 @@ sleep 2
 
 echo "yarprobot interface ..."
 echo "[INFO] Waiting for /icubSim/torso to become available..."
-until yarp ping /icubSim/torso; do sleep 1; done
+#until yarp ping /icubSim/torso; do sleep 1; done
 
-yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim #>/dev/null 2>&1 &
+yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
 
 sleep 4
 
