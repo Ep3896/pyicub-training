@@ -9,12 +9,25 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      COMPOSE_PROFILES: test  # Enable only the pyicub-test profile
-      DISPLAY: :99  # ✅ Fake display for headless runs
+      COMPOSE_PROFILES: test
+      DISPLAY: :99
+      XDG_RUNTIME_DIR: /tmp/runtime
+      XDG_DATA_DIRS: /usr/share
+      PULSE_SERVER: unix:/tmp/runtime/pulse/native
+      HOME: /github/home  # required by some pulse paths
+      QT_X11_NO_MITSHM: "1"
+      NO_AT_BRIDGE: "1"
+      LIBGL_ALWAYS_SOFTWARE: "false"
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
+
+    - name: Create dummy runtime dirs
+      run: |
+        mkdir -p /tmp/runtime/pulse
+        mkdir -p /tmp/runtime/dconf
+        mkdir -p /github/home/.config/pulse
 
     - name: Run pyicub-test using Docker Compose
       run: |
