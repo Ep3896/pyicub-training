@@ -30,11 +30,11 @@ yarprun --server /$ICUBSRV_NODE --log >/dev/null 2>&1 &
 sleep 2
 
 echo "gazebo ..."
-gzserver /workspace/icub-apps/gazebo/icub-world.sdf #>/dev/null 2>&1 &
+gzserver /workspace/icub-apps/gazebo/icub-world.sdf >/dev/null 2>&1 &
 sleep 2
 
 echo "yarprobot interface ..."
-yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
+yarprobotinterface --context gazeboCartesianControl #--config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
 
 sleep 4
 
