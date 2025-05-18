@@ -10,6 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       COMPOSE_PROFILES: test  # Enable only the pyicub-test profile
+      DISPLAY: :99  # ✅ Fake display for headless runs
 
     steps:
     - name: Checkout repository
