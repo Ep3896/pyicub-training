@@ -3,7 +3,7 @@ name: CI - Pyicub Tests
 on:
   push:
     branches:
-      - CI  # Trigger only on push to the "CI" branch
+      - CI
 
 jobs:
   test:
@@ -11,10 +11,9 @@ jobs:
     env:
       COMPOSE_PROFILES: test
       DISPLAY: :99
-      XDG_RUNTIME_DIR: /tmp/runtime
+      XDG_RUNTIME_DIR: /home/runner/runtime
       XDG_DATA_DIRS: /usr/share
-      PULSE_SERVER: unix:/tmp/runtime/pulse/native
-      HOME: /github/home  # required by some pulse paths
+      PULSE_SERVER: unix:/home/runner/runtime/pulse/native
       QT_X11_NO_MITSHM: "1"
       NO_AT_BRIDGE: "1"
       LIBGL_ALWAYS_SOFTWARE: "false"
@@ -23,11 +22,11 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Create dummy runtime dirs
+    - name: Create dummy runtime and pulse directories
       run: |
-        mkdir -p /tmp/runtime/pulse
-        mkdir -p /tmp/runtime/dconf
-        mkdir -p /github/home/.config/pulse
+        mkdir -p /home/runner/runtime/pulse
+        mkdir -p /home/runner/runtime/dconf
+        mkdir -p $HOME/.config/pulse
 
     - name: Run pyicub-test using Docker Compose
       run: |
