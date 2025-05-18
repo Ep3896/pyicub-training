@@ -33,8 +33,12 @@ echo "gazebo ..."
 gzserver /workspace/icub-apps/gazebo/icub-world.sdf >/dev/null 2>&1 &
 sleep 2
 
+
 echo "yarprobot interface ..."
-yarprobotinterface --context gazeboCartesianControl #--config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
+echo "[INFO] Waiting for /icubSim/torso to become available..."
+until yarp ping /icubSim/torso; do sleep 1; done
+
+yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim #>/dev/null 2>&1 &
 
 sleep 4
 
