@@ -43,7 +43,8 @@ yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portp
 sleep 4
 
 iKinGazeCtrl --context gazeboCartesianControl --from iKinGazeCtrl.ini >/dev/null 2>&1 &
-sleep 2
+
+sleep 10
 
 #run tests
 PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v # --junitxml=/workdir/results.xml  
