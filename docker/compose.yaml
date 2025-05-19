@@ -13,7 +13,7 @@ x-common-runtime: &common-runtime
   privileged: true
   stdin_open: true
   tty: true
-  #network_mode: host
+  network_mode: host
   env_file:
     - .env
 
@@ -80,8 +80,8 @@ services:
         DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME}
         PYICUB_URL: ${PYICUB_URL}
         PYICUB_BRANCH: ${PYICUB_BRANCH}
-    command: ["bash", "-c", "/workspace/scripts/ci_setup.sh && /workspace/scripts/ci_test.sh"]
-    #command: ["bash", "/workspace/scripts/runTests.sh"]
+    #command: ["bash", "-c", "/workspace/scripts/ci_setup.sh && /workspace/scripts/ci_test.sh"]
+    command: ["bash", "/workspace/scripts/runTests.sh"]
     environment: *common-environment
     volumes: *common-volumes
     profiles: ["test"]

@@ -35,16 +35,16 @@ sleep 2
 
 
 echo "yarprobot interface ..."
-
+echo "[INFO] Waiting for /icubSim/torso to become available..."
 #until yarp ping /icubSim/torso; do sleep 1; done
 
 yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
 
-sleep 60
+sleep 4
 
 iKinGazeCtrl --context gazeboCartesianControl --from iKinGazeCtrl.ini >/dev/null 2>&1 &
 
-sleep 50
+sleep 10
 
 #run tests
 PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v # --junitxml=/workdir/results.xml  
