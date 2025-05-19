@@ -238,8 +238,6 @@ git push origin --tags
 
 ---
 
----
-
 ## Appendix: Configure GitHub SSH Access Inside the Container
 
 Follow these steps **inside the Docker container**:
