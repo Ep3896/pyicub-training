@@ -238,23 +238,6 @@ git push origin --tags
 
 ---
 
-## 8. Recap and Q\&A (15 minutes)
-
-Discuss:
-
-* Challenges faced with Docker or testing.
-* Common mistakes found in PR reviews.
-* Suggestions for streamlining the workflow.
-
-Optional Reflection Topics:
-
-* How containers simplified the dev process.
-* Advantages of CI workflows and structured testing.
-
----
-
-This document serves as the backbone of your workshop. Each section is meant to be followed hands-on by every participant, ensuring they walk away with a solid grasp of the real `pyicub` dev lifecycle.
-
 ---
 
 ## Appendix: Configure GitHub SSH Access Inside the Container
