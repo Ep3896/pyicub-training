@@ -19,7 +19,7 @@ if [ -d "pyicub-training" ]; then
   mv pyicub-training/ pyicub/
 fi
 
-cd /workspace/pyicub|| exit 1
+cd /workspace/pyicub || exit 1
 sleep 2
 
 #Disable YARP logging to avoid clutter
@@ -35,7 +35,6 @@ echo "gazebo ..."
 gzserver /workspace/icub-apps/gazebo/icub-world.sdf >/dev/null 2>&1 &
 sleep 2
 
-
 echo "yarprobot interface ..."
 yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
 
@@ -43,14 +42,11 @@ sleep 4
 
 iKinGazeCtrl --context gazeboCartesianControl --from iKinGazeCtrl.ini >/dev/null 2>&1 &
 
-sleep 1
-
-yarp name list
 sleep 4
 
 #run tests
 PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v --html=report.html --self-contained-html
-    #--junitxml=./results.xml  
+#--junitxml=./results.xml
 PYTEST_EXIT_CODE=$?
 
 sleep 1
