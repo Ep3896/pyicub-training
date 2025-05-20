@@ -58,15 +58,15 @@ This **won't** be a practical and interactive session, so please enjoy your coff
 
 3. **Development Environment**
 
-    The project uses a Docker-based environment to isolate dependencies and ensure consistency across machines.
+    - The project uses a Docker-based environment to isolate dependencies and ensure consistency across machines.
 
-    All development and testing is performed inside the container, which includes the full YARP and Pyicub stack.
+    - All development and testing is performed inside the container, which includes the full YARP and Pyicub stack.
 
-    The container runs as root to simplify access to simulation tools, device interfaces, and YARP ports.
+    - The container runs as root to simplify access to simulation tools, device interfaces, and YARP ports.
 
-    This setup guarantees that all contributors work in the same environment, avoiding configuration drift and system-specific issues.
+    - This setup guarantees that all contributors work in the same environment, avoiding configuration drift and system-specific issues.
 
-    Testing and automation scripts (e.g., runTests.sh) are integrated directly into the container and executed as part of the local CI process.
+    - Testing and automation scripts (e.g., runTests.sh) are integrated directly into the container and executed as part of the local CI process.
 
 ---
 
