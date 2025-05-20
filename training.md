@@ -1,307 +1,197 @@
-# Pyicub Team Development Workshop: Complete Group Training Exercise
+# Pyicub Team Development Meeting: CI and Recap of What We Have Achieved So Far
 
-This workshop is designed to simulate a **complete contribution cycle** to the `pyicub` project. Each team member will actively participate in replicating a full development pipeline:
+## **Structure of the Meeting**:
 
-* Working in a **Dockerized development environment**.
-* Making changes on a new branch.
-* Writing tests and running them in simulation.
-* Opening and reviewing a **Pull Request**.
-* Merging to `main`, tagging a release, and updating documentation.
+1. **Theoretical Part**:   
+   1.1 Quick recap
+   
+   1.2 CI workflow 
 
----
+2. **Practical Part**: 
+   2.1 CI in action!
 
-## 1. Introduction (5 minutes)
+This **won't** be a practical and interactive session, so please enjoy your coffee! :)
 
-### Objective:
+--- 
 
-Understand the goals and workflow of this workshop.
+### Quick Recap
 
-* Repository URL: `https://github.com/Ep3896/pyicub-training`
-* Each participant will:
+1. **Branching Strategy**
 
-  1. Clone the repo and build the dev container.
-  2. Create and switch to a new feature branch.
-  3. Implement a simple function.
-  4. Write tests for it.
-  5. Submit a pull request.
-  6. Merge and tag a release.
+    We follow a trunk-based development model, where master is the main production branch.
 
----
+    All new work is done in short-lived branches derived from master, using clear naming conventions:
 
-## 2. Docker Development Environment (15 minutes)
+        feature/* for new features
 
-### Step-by-step:
+        bugfix/* for bug fixes
 
-1. **Clone the repository**:
+        vX.Y for major version lines if divergence is needed
 
-```bash
-git clone https://github.com/Ep3896/pyicub-training.git
-cd pyicub-training/docker
-```
+    This strategy keeps the main branch stable and simplifies integration.
 
-2. **Build and Run the environment using the provided script**:
+    Each branch is isolated, focused on a single task, and deleted after being merged to keep the repository clean.
 
+--- 
 
-```bash
-bash build
-```
+2. **Pull Request Workflow**
 
-```bash
-bash go
-```
+    Every contribution is integrated through a pull request (PR) to master.
 
-This script will:
+    The standard process includes:
 
-* Configure display variables for GUI support.
-* Build all services (backend/frontend).
-* Run `docker compose up` with the appropriate profiles.
+        Creating a feature or bugfix branch
 
-3. **Inside the container**, you’ll be dropped into:
+        Writing meaningful commit messages (ideally following the Conventional Commits spec)
 
-```
-/workspace/
-├── icub-apps/
-├── pyicub/
-├── pyicub-apps/
-└── scripts/
-```
+        Opening a PR with a clear description and test status
 
-4. **Validate setup**:
+        Assigning a reviewer and addressing feedback
 
-```bash
-cd pyicub/
-pytest -m smoke
-```
+    Even if GitHub Actions is not used, the PR is treated as a formal checkpoint:
 
-You should see tests passing, confirming your container is functional.
+        Developers are expected to run tests locally before submitting
+
+        A shared PR template ensures consistency, traceability, and code quality
 
 ---
 
-## 3. Code Contribution Workflow (20 minutes)
+3. **Development Environment**
 
-### 3.1 Create a new feature branch:
+    The project uses a Docker-based environment to isolate dependencies and ensure consistency across machines.
 
-```bash
-git checkout -b feature/add-print-version
-```
+    All development and testing is performed inside the container, which includes the full YARP and Pyicub stack.
 
-### 3.2 Add a feature in `pyicub/__init__.py`:
+    The container runs as root to simplify access to simulation tools, device interfaces, and YARP ports.
 
-```python
-def print_version():
-    """Prints the current version of the library."""
-    print(f"pyicub version: {__version__}")
-```
+    This setup guarantees that all contributors work in the same environment, avoiding configuration drift and system-specific issues.
 
-### 3.3 Follow coding conventions:
-
-At the beginning, please install the following packages:
-
-```bash 
-pip3 install flake8 mypy
-```
-
-Then these linters inside the container:
-
-```bash
-flake8 pyicub/
-mypy pyicub/
-```
-
-Ensure your code is clean, typed, and correctly formatted.
-
-### 3.4 Commit your changes:
-
-Warning!: GitHub access is not configured, so please check the [Appendix](#appendix-configure-github-ssh-access-inside-the-container) to configure it in the container.
-
-```bash
-git add pyicub/__init__.py
-git commit -m "Feature: add print_version utility function"
-```
+    Testing and automation scripts (e.g., runTests.sh) are integrated directly into the container and executed as part of the local CI process.
 
 ---
 
-## 4. Writing and Running Tests (20 minutes)
+### CI workflow 
 
-### 4.1 Add a smoke test in `tests/test_version.py`:
+1. **Introduction**
 
-```python
-import pytest
+    Continuous Integration (CI) is a development practice that automates the testing and validation of code before it's merged into a shared repository.
 
-@pytest.mark.smoke
-def test_print_version(capsys):
-    import pyicub
-    pyicub.print_version()
-    captured = capsys.readouterr()
-    assert pyicub.__version__ in captured.out
-```
+    It helps teams detect issues early, maintain code quality, and streamline collaboration.
 
-### 4.2 Run your test:
+    In this presentation, we review what CI is, how we've applied it to our project, and how it is implemented in our PyiCub workflow.
 
-```bash
-pytest -m smoke
-```
+---
+2. **Standard CI Workflow**
 
-### 4.3 Optional: Run integration tests
+    A typical CI pipeline is triggered on every code change, often via a pull request to a main branch.
 
-Ensure `Gazebo` is running with the full simulation profile. Then:
+    The pipeline automatically:
 
-```bash
-pytest -m integration
-```
+        1) Install dependencies 
+   
+        2) Runs tests
+
+        3) Enforces coding standards
+
+    If the pipeline passes, the code is considered safe to merge.
+
+    This process ensures that all contributions are validated in a consistent, isolated environment, reducing integration errors and improving software reliability.
+
+    Tools like GitHub Actions, GitLab CI, and Jenkins are commonly used to implement this model in cloud-hosted environments.
 
 ---
 
-Then if the test is passed, add and commit (try by yourself).
+4. **Limitations in Our Context**
 
-## 5. Rebasing, Commit Hygiene & Merging (10 minutes)
+    Despite following best practices for containerization, we were unable to use cloud-based CI systems like GitHub Actions.
 
-### 5.1 Sync with master:
+    This limitation stems from YARP’s reliance on system-level features such as real-time communication, network services, and device access, which are typically restricted or unavailable in hosted CI environments.
 
-```bash
-git checkout master
-git pull origin master
-```
-
-### 5.2 Rebase your branch:
-
-```bash
-git checkout feature/add-print-version
-git rebase master
-```
-
-Resolve conflicts if necessary. Then:
-
-```bash
-git add .
-git commit -m "Feature: add print_version utility test"
-```
-This block stages all changes in the current directory and commits them with a descriptive message. It ensures that your changes are saved locally in the Git history.
-
-```bash
-git pull --rebase origin feature/add-print-version
-```
-This command fetches the latest changes from the remote branch and rebases your local branch on top of it. It helps to integrate the latest updates while maintaining a clean commit history.
-
-### 5.3 Push your feature branch:
-
-```bash
-git push origin feature/add-print-version --force-with-lease
-```
-This command force-pushes your rebased branch to the remote repository while ensuring no unexpected changes are overwritten. It is used to update the remote branch after a rebase.
-
+    As a result, we opted for a local CI workflow, leveraging Docker and Git hooks to enforce testing before code integration.
 
 ---
 
-## 6. Open a Pull Request & Review (10 minutes)
+5. **Our CI Approach**
 
-Go to GitHub and open a new Pull Request:
+    We implemented a local Continuous Integration strategy tailored to our constraints.
 
-* Title: `Feature: Add print_version utility`
-* Use the PR template from `Pull_request.md`.
+    All development occurs inside a Docker container, ensuring a consistent environment across contributors.
 
-Assign reviewers. Reviewers will:
+    A Git pre-push hook runs the test suite automatically before any code is pushed to the repository.
 
-* Check code structure and docstrings.
-* Run tests locally.
-* Validate code formatting with `flake8`, `mypy`.
-* Approve or request changes.
+    This guarantees that only tested code reaches the remote repository, enforcing quality without relying on cloud-based CI platforms.
+
+    The test logic is centralized in a script (scripts/test.sh), making the process reproducible and easy to maintain.
 
 ---
 
-## 7. Documentation & Release (10 minutes)
+6. **What We’ve Achieved So Far**
 
-### 7.1 Update the changelog:
+    - Established a consistent and reproducible development environment using Docker.
 
-* Add an entry to `CHANGELOG.md`:
+    - Automated the execution of tests through a pre-push Git hook, ensuring code is verified before integration.
 
-```md
-## [0.3.1] - YYYY-MM-DD
-### Added
-- `print_version()` utility function to display the current library version.
-```
+    - Enabled team-wide alignment on testing practices without relying on external CI infrastructure.
 
-this is an [example](https://github.com/moveit/moveit/blob/master/moveit_core/CHANGELOG.rst) of how to structure it
-
-### 7.2 Merge the PR
-
-Once approved, let the maintainer merge it to `main`.
-
-### 7.3 Tag the release:
-
-```bash
-git checkout master
-git pull origin master
-git tag -a v0.3.1 -m "Release v0.3.1: add print_version"
-git push origin --tags
-```
-
----
-
-## 8. Recap and Q\&A (15 minutes)
-
-Discuss:
-
-* Challenges faced with Docker or testing.
-* Common mistakes found in PR reviews.
-* Suggestions for streamlining the workflow.
-
-Optional Reflection Topics:
-
-* How containers simplified the dev process.
-* Advantages of CI workflows and structured testing.
-
----
-
-This document serves as the backbone of your workshop. Each section is meant to be followed hands-on by every participant, ensuring they walk away with a solid grasp of the real `pyicub` dev lifecycle.
-
----
-
-## Appendix: Configure GitHub SSH Access Inside the Container
-
-Follow these steps **inside the Docker container**:
+    - Reduced integration issues by enforcing local validation before any contribution reaches the shared repository.
+  
 
 
-### 1. Configure Git User Id 
+------------
 
-```bash
-git config --global user.name "Your Name"
-git config --global user.email "your_email@example.com"
-```
 
-### 2. Generate SSH Key
-```bash
-ssh-keygen -t ed25519 -C "your_email@example.com"
-```
+## Practical Part: CI Contribution Demo 
 
-Press Enter through the prompts to use the default location.
 
-### 3. Start SSH Agent and Add the Key
-```bash
-eval "$(ssh-agent -s)"
-ssh-add ~/.ssh/id_ed25519
-```
 
-### 4. Copy Your Public Key
-```bash
-cat ~/.ssh/id_ed25519.pub
-```
+1. Start the Docker development container
 
-Copy the output.
+    - Launch using the go script or docker compose with the appropriate profile (e.g., backend).
 
-### 5. Add the Key to GitHub
-- Go to [GitHub → Settings → SSH and GPG keys](https://github.com/settings/keys)
-- Click **New SSH key**
-- Paste the copied key and save
+    ```bash
+    bash go 
+    ```
 
-### 6. Switch Remote to SSH
-```bash
-git remote set-url origin git@github.com:Ep3896/pyicub-training.git
-```
+    - Enter the workspace at /workspace/pyicub.
 
-### 7. Test Access (Optional)
-```bash
-ssh -T git@github.com
-```
+2. Pull the latest changes from master
 
-You should see a success message. Now you can push without entering a username/password.
+    - Ensure the container environment is working with the latest version of the main branch.
+
+3. Create a new feature or bugfix branch
+
+    - Name it following the convention (e.g., feature/fix-log-path or bugfix/timeout-handler).
+
+4. Make a small code contribution
+
+    - Edit the code inside the container.
+
+    - Apply best practices for modularity, style, and documentation.
+
+5. Run tests locally (inside Docker)
+
+    - Use scripts/test.sh or pytest to validate functionality.
+
+    - Confirm no regressions were introduced.
+
+6. Commit your changes
+
+    - Write a clear, descriptive commit message following the Conventional Commits format.
+
+7. Push the branch to remote
+
+    - The Git pre-push hook will execute test.sh before allowing the push.
+
+    - If tests pass, the push proceeds.
+
+8. Open a Pull Request
+
+    - Fill in the PR template: summary, test logs, documentation.
+
+    - Assign reviewers and respond to feedback.
+
+9. Merge the branch into master
+
+    - Once reviewed and approved, the change is merged by a maintainer.
+
+    - Branch is deleted after merge to keep history clean.
