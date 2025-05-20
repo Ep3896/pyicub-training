@@ -13,8 +13,8 @@ fi
 xhost +local:root
 
 # 1. Clean state (remove only containers, not volumes)
-echo "Bringing down any running containers (preserving volumes)..."
-COMPOSE_PROFILES=backend,frontend docker compose down --remove-orphans
+#echo "Bringing down any running containers (preserving volumes)..."
+#COMPOSE_PROFILES=backend,frontend docker compose down --remove-orphans
 
 # 2. Build
 echo "Building base images..."

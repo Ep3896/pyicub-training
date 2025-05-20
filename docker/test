@@ -11,6 +11,6 @@ sleep 1
 
 docker compose --profile test up
 
-sleep 1
+#sleep 1
 
-docker compose down --remove-orphans
+#docker compose down --remove-orphans

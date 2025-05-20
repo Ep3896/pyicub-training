@@ -26,6 +26,28 @@
 ARG DOCKER_SRC=ubuntu:latest
 FROM $DOCKER_SRC
 
+
+# ─── Git Credential Manager installation ──────────────────────────
+
+ARG GIT_USER_NAME
+ARG GIT_USER_EMAIL
+
+RUN apt update && apt install -y \
+     curl \
+     gnupg \
+     libsecret-1-0 \
+     libsecret-1-dev \
+  && curl -LO https://github.com/GitCredentialManager/git-credential-manager/releases/download/v2.4.1/gcm-linux_amd64.2.4.1.deb \
+  && apt install -y ./gcm-linux_amd64.2.4.1.deb \
+  && git-credential-manager configure \
+  && git config --global credential.credentialStore plaintext
+
+# ─── Configure git ─────────────────────────────────────────────
+RUN if [ -n "$GIT_USER_NAME" ] && [ -n "$GIT_USER_EMAIL" ]; then \
+      git config --global user.name "$GIT_USER_NAME" && \
+      git config --global user.email "$GIT_USER_EMAIL"; \
+    fi
+
 WORKDIR /workspace 
 
 ENV PATH=$PATH:/root/.local/bin

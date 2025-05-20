@@ -15,7 +15,9 @@ else
   echo "iCub entry added to /etc/hosts"
 fi
 
-mv pyicub-training/ pyicub/
+if [ -d "pyicub-training" ]; then
+  mv pyicub-training/ pyicub/
+fi
 
 cd /workspace/pyicub|| exit 1
 sleep 2
@@ -47,8 +49,11 @@ yarp name list
 sleep 4
 
 #run tests
-PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v --junitxml=/workdir/results.xml  
+PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v --html=report.html --self-contained-html
+    #--junitxml=./results.xml  
 PYTEST_EXIT_CODE=$?
+
+sleep 1
 
 # Clean up: kill all background jobs
 kill $(jobs -p) >/dev/null 2>&1

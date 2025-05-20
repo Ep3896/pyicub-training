@@ -50,6 +50,8 @@ services:
         DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME}
         PYICUB_URL: ${PYICUB_URL}
         PYICUB_BRANCH: ${PYICUB_BRANCH}
+        GIT_USER_NAME: ${GIT_USER_NAME}
+        GIT_USER_EMAIL: ${GIT_USER_EMAIL}
     image: ${PYICUB_IMAGE_NAME}
     command: ["/bin/bash", "-c", "terminator & bash /workspace/scripts/runSetup.sh"]
     environment: *common-environment
@@ -80,6 +82,8 @@ services:
         DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME}
         PYICUB_URL: ${PYICUB_URL}
         PYICUB_BRANCH: ${PYICUB_BRANCH}
+        GIT_USER_NAME: ${GIT_USER_NAME}
+        GIT_USER_EMAIL: ${GIT_USER_EMAIL}
     command: ["/bin/bash","-c", "/workspace/scripts/runTests.sh"]
     environment: *common-environment
     volumes: *common-volumes
