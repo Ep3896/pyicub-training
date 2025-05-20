@@ -257,6 +257,16 @@ git push origin feature/improve-logging
 
 > The pre-push Git hook will run `scripts/runTests.sh`. If tests fail, the push will be blocked.
 
+
+Problem with pushing becuase Github Credential Manager does not open?
+Please prompt the following command to solve this issue:
+
+```bash
+#configure git credentials
+git-credential-manager configure 
+git config --global credential.credentialStore plaintext
+```
+
 ---
 
 ### 8.5. Test the Merged State Locally (Pre-PR Validation)
