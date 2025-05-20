@@ -18,22 +18,6 @@ jobs:
       NO_AT_BRIDGE: "1"
       LIBGL_ALWAYS_SOFTWARE: "false"
 
-    services:
-      yarp-server:
-        image: robotology/yarp
-        command: yarpserver --write
-        options: >-
-          --health-cmd "yarp ping /root"
-          --health-interval 5s
-          --health-timeout 10s
-          --health-retries 5
-        ports:
-          - 10000:10000
-        volumes:
-          - /tmp:/tmp
-        networks:
-          - yarpnet
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -44,11 +28,10 @@ jobs:
         mkdir -p /home/runner/runtime/dconf
         mkdir -p $HOME/.config/pulse
 
-    - name: Launch tests in Docker Compose
+    - name: Run pyicub-test using Docker Compose
       run: |
         cd docker
-        docker network create yarpnet || true
-        docker compose --profile test --project-name ci --file compose.yaml up --abort-on-container-exit
+        docker compose --profile test build --no-cache && docker compose --profile test up
 
     - name: Upload test results if present
       if: success() || failure()
@@ -56,7 +39,3 @@ jobs:
       with:
         name: test-results
         path: docker/results/result.xml
-
-    networks:
-      yarpnet:
-

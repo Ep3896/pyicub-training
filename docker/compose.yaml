@@ -1,9 +1,3 @@
-version: "3.8"
-
-networks:
-  yarpnet:
-    driver: bridge
-
 x-common-env: &common-environment
   DISPLAY: ${DISPLAY:?err}
   PULSE_SERVER: unix:${XDG_RUNTIME_DIR:?err}/pulse/native
@@ -14,15 +8,16 @@ x-common-env: &common-environment
   NO_AT_BRIDGE: "1"
   LIBGL_ALWAYS_SOFTWARE: "false"
 
+
 x-common-runtime: &common-runtime
   privileged: true
   stdin_open: true
   tty: true
+  network_mode: host
   env_file:
     - .env
-  networks:
-    - yarpnet
 
+# Fully flattened volumes for pyicub
 x-pyicub-volumes: &pyicub-volumes
   - /tmp/.X11-unix:/tmp/.X11-unix
   - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
@@ -32,14 +27,16 @@ x-pyicub-volumes: &pyicub-volumes
     source: pyicub-workspace
     target: /workspace
 
+
+
+# Common bind-mounts only (for test container)
 x-common-volumes: &common-volumes
-  - /tmp/.X11-unix:/tmp/.X11-unix
+  - /tmp/.X11-unix:/tmp/.X11-unixs
   - ${HOME}/.config/pulse/cookie:/run/pulse/cookie
   - ${XDG_RUNTIME_DIR:?err}/pulse:${XDG_RUNTIME_DIR:?err}/pulse
   - ${XDG_RUNTIME_DIR:?err}/dconf:${XDG_RUNTIME_DIR:?err}/dconf
-  - type: volume
-    source: pyicub-workspace
-    target: /workspace
+
+
 
 services:
 
@@ -65,32 +62,29 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     image: ${PYICUB_FRONTEND_IMAGE_NAME}
+    network_mode: host
     depends_on:
       - pyicub
-    volumes:
+    volumes: 
       - type: volume
         source: pyicub-frontend-workspace
         target: /workspace/pyicub-frontend
-    networks:
-      - yarpnet
     profiles: ["frontend"]
 
   pyicub-test:
     <<: *common-runtime
-    build:
+    build:  
       context: ./backend
       dockerfile: Dockerfile
       args:
         DOCKER_SRC: ${ROBOTOLOGY_IMAGE_NAME}
         PYICUB_URL: ${PYICUB_URL}
         PYICUB_BRANCH: ${PYICUB_BRANCH}
-    command: ["bash", "/workspace/scripts/runTests.sh"]
+    command: ["/bin/bash","-c", "/workspace/scripts/runTests.sh"]
     environment: *common-environment
     volumes: *common-volumes
-    depends_on:
-      - pyicub
     profiles: ["test"]
 
 volumes:
   pyicub-workspace:
-  pyicub-frontend-workspace:
+  pyicub-frontend-workspace:  

@@ -35,24 +35,24 @@ sleep 2
 
 
 echo "yarprobot interface ..."
-echo "[INFO] Waiting for /icubSim/torso to become available..."
-#until yarp ping /icubSim/torso; do sleep 1; done
-
 yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
 
 sleep 4
 
 iKinGazeCtrl --context gazeboCartesianControl --from iKinGazeCtrl.ini >/dev/null 2>&1 &
 
-sleep 10
+sleep 1
+
+yarp name list
+sleep 4
 
 #run tests
-PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v # --junitxml=/workdir/results.xml  
+PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v --junitxml=/workdir/results.xml  
 PYTEST_EXIT_CODE=$?
 
 # Clean up: kill all background jobs
-kill $(jobs -p)
-wait
+kill $(jobs -p) >/dev/null 2>&1
+wait >/dev/null 2>&1
 
 # Exit with pytest's exit code
-exit $PYTEST_EXIT_CODE
+exit $PYTEST_EXIT_CODE >/dev/null 2>&1
