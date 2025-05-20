@@ -18,7 +18,7 @@ xhost +local:root
 
 # 2. Build
 echo "Building base images..."
-COMPOSE_PROFILES=backend,frontend PYICUB_URL=https://github.com/Ep3896/pyicub-training docker compose build
+COMPOSE_PROFILES=backend,frontend docker compose build
 
 # 3. Start up
 echo "Starting up the stack using compose.yaml..."
