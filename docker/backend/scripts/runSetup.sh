@@ -13,6 +13,10 @@ else
   echo "iCub entry added to /etc/hosts"
 fi
 
+if [ -d "pyicub-training" ]; then
+  mv pyicub-training/ pyicub/
+fi
+
 # Wait until icub head is reachable(ping icub-head), if timeout expires then exit with the err
 YARP_FORWARD_LOG_ENABLE=0 yarpserver --write &
 sleep 2
