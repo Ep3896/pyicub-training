@@ -1,6 +1,7 @@
 #!/bin/bash
+set -e
 
-echo "PyTest ..."
+echo "[CI] Setting up environment..."
 
 source ${ROBOTOLOGY_SUPERBUILD_INSTALL_DIR}/share/robotology-superbuild/setup.sh
 
@@ -15,12 +16,11 @@ else
   echo "iCub entry added to /etc/hosts"
 fi
 
-if [ -d "pyicub-training" ]; then
-  mv pyicub-training/ pyicub/
-fi
+mv pyicub-training/ pyicub/
 
-cd /workspace/pyicub || exit 1
+cd /workspace/pyicub|| exit 1
 sleep 2
+
 
 #Disable YARP logging to avoid clutter
 YARP_FORWARD_LOG_ENABLE=0 yarpserver --write >/dev/null 2>&1 &
@@ -31,29 +31,31 @@ yarprun --server /$ICUBSRV_NODE --log >/dev/null 2>&1 &
 
 sleep 2
 
-echo "gazebo ..."
-gzserver /workspace/icub-apps/gazebo/icub-world.sdf >/dev/null 2>&1 &
-sleep 2
 
-echo "yarprobot interface ..."
+echo "[CI] Starting Gazebo..."
+gzserver /workspace/icub-apps/gazebo/icub-world.sdf >/dev/null 2>&1 &
+sleep 4
+
+echo "[CI] Launching yarprobotinterface..."
 yarprobotinterface --context gazeboCartesianControl --config no_legs.xml --portprefix /iCubSim >/dev/null 2>&1 &
 
-sleep 4
+sleep 5 
 
+yarp name list 
+
+sleep 1 
+
+
+echo "[CI] Setup complete"
+
+
+echo "[CI] Launching iKinGazeCtrl..."
 iKinGazeCtrl --context gazeboCartesianControl --from iKinGazeCtrl.ini >/dev/null 2>&1 &
+sleep 2
 
-sleep 4
+echo "[CI] Running pytest..."
+export PYTEST_ADDOPTS='-p no:cacheprovider'
+pytest -v --junitxml=/workspace/results/result.xml
 
-#run tests
-PYTEST_ADDOPTS="-p no:cacheprovider" pytest -v --html=report.html --self-contained-html
-#--junitxml=./results.xml
-PYTEST_EXIT_CODE=$?
 
-sleep 1
 
-# Clean up: kill all background jobs
-kill $(jobs -p) >/dev/null 2>&1
-wait >/dev/null 2>&1
-
-# Exit with pytest's exit code
-exit $PYTEST_EXIT_CODE >/dev/null 2>&1
