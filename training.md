@@ -8,19 +8,23 @@
    1.2 CI workflow 
 
 2. **Practical Part**: 
+
    2.1 CI in action!
 
 This **won't** be a practical and interactive session, so please enjoy your coffee! :)
 
 --- 
 
+
 ### Quick Recap
 
 1. **Branching Strategy**
 
+    We follow a trunk-based development model, where <strong>master</strong> is the main production branch:
+
     <div style="text-align: center;">
         <img src="./media/trunk-based_development.png" alt="Trunk based development" style="width: 60%;">
-        <p>We follow a trunk-based development model, where <strong>master</strong> is the main production branch.</p>
+        <p></p>
     </div>
 
     All new work is done in short-lived branches derived from master, using clear naming conventions:
@@ -46,19 +50,19 @@ This **won't** be a practical and interactive session, so please enjoy your coff
 
     The standard process includes:
 
-        Creating a feature or bugfix branch
+        - Creating a feature or bugfix branch
 
-        Writing meaningful commit messages (ideally following the Conventional Commits spec)
+        - Writing meaningful commit messages (ideally following the Conventional Commits spec)
 
-        Opening a PR with a clear description and test status
+        - Opening a PR with a clear description and test status
 
-        Assigning a reviewer and addressing feedback
+        - Assigning a reviewer and addressing feedback
 
     Even if GitHub Actions is not used, the PR is treated as a formal checkpoint:
 
-        Developers are expected to run tests locally before submitting
+        - Developers are expected to run tests locally before submitting
 
-        A shared PR template ensures consistency, traceability, and code quality
+        - A shared PR template ensures consistency, traceability, and code quality
 
 ---
 
@@ -255,6 +259,7 @@ git commit -m "feat(logging): improve output format for error logs"
 git push origin feature/improve-logging
 ```
 
+> [!IMPORTANT]
 > The pre-push Git hook will run `scripts/runTests.sh`. If tests fail, the push will be blocked.
 
 
@@ -368,8 +373,6 @@ Fixes #[issue_number]
 - [ ] No commented-out debug code or print statements
 - [ ] No large files or data included by mistake (keys etc..)
 ```
-
----
 
 
 ---
