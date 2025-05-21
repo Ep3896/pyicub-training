@@ -189,7 +189,7 @@ This guide walks through the standard CI workflow for contributing to the `pyicu
 2. Open the command palette (`Ctrl+Shift+P`) and run:
 
    ```
-   Remote-Containers: Attach to Running Container
+   Dev Containers: Attach to Running Container
    ```
 3. Select the appropriate container from the list.
 
