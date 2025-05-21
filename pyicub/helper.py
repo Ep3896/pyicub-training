@@ -26,6 +26,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+
 import yarp
 yarp.Network().init()
 
@@ -68,6 +69,7 @@ class iCub(metaclass=iCubSingleton):
     def __init__(self, robot_name="icub", request_manager: iCubRequestsManager=None, action_repository_path='', proxy_host=None):
         SIMULATION = os.getenv('ICUB_SIMULATION')
 
+        print(10/0)
         self._position_controllers_   = {}
         self._services_               = {}
         self._gaze_ctrl_              = None
