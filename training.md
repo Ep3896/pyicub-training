@@ -178,20 +178,20 @@ This guide walks through the standard CI workflow for contributing to the `pyicu
    It opens `terminator` and enters the workspace at:
 
    ```
-   /workspace/pyicub
+   /workspace
    ```
 
 ---
 
 ### 2. Open the Workspace in VS Code
 
-1. Launch Visual Studio Code.
+1. Launch Visual Studio Code in the host machine.
 2. Open the command palette (`Ctrl+Shift+P`) and run:
 
    ```
-   Remote-Containers: Attach to Running Container
+   Dev Containers: Attach to Running Container
    ```
-3. Select the appropriate container from the list.
+3. Select the appropriate container from the list (in this case /pyicub).
 
 ---
 
@@ -229,6 +229,8 @@ git checkout -b feature/improve-logging
 bash /workspace/scripts/runTests.sh
 ```
 or 
+
+If from yarpmanager the iCub_gazebo scripts are already running , yuou can manually launch test through:
 
 ```bash
 cd /workpace/pyicub/scripts
