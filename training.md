@@ -185,7 +185,7 @@ This guide walks through the standard CI workflow for contributing to the `pyicu
 
 ### 2. Open the Workspace in VS Code
 
-1. Launch Visual Studio Code.
+1. Launch Visual Studio Code in the host machine.
 2. Open the command palette (`Ctrl+Shift+P`) and run:
 
    ```
