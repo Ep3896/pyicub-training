@@ -178,7 +178,7 @@ This guide walks through the standard CI workflow for contributing to the `pyicu
    It opens `terminator` and enters the workspace at:
 
    ```
-   /workspace/pyicub
+   /workspace
    ```
 
 ---
@@ -191,7 +191,7 @@ This guide walks through the standard CI workflow for contributing to the `pyicu
    ```
    Dev Containers: Attach to Running Container
    ```
-3. Select the appropriate container from the list.
+3. Select the appropriate container from the list (in this case /pyicub).
 
 ---
 
