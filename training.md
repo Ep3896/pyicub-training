@@ -230,6 +230,8 @@ bash /workspace/scripts/runTests.sh
 ```
 or 
 
+If from yarpmanager the iCub_gazebo scripts are already running , yuou can manually launch test through:
+
 ```bash
 cd /workpace/pyicub/scripts
 pytest -v
